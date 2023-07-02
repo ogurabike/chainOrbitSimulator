@@ -1,0 +1,54 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.25;
+  }
+  
+  table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    padding: 0;
+    table-layout: fixed;
+  }
+  
+  table tr {
+    background-color: #e6f2f5;
+    padding: .35em;
+    border-bottom: 2px solid #fff;
+  }
+  table th,
+  table td {
+    padding: 1em 10px 1em 1em;
+    border-right: 2px solid #fff;
+    font-size: 0.8em;
+  }
+  table th {
+    font-size: 0.9em;
+  }
+  table thead tr{
+    background-color: #167F92;
+    color:#fff;
+  }
+  table tbody th {
+      background: #78bbc7;
+      color: #fff;
+  }
+  .chart{
+    background: #fff;
+    align-items: center;
+  }
+  .unit{
+    width: 30px;
+  }
+  .symbol{
+    width: 30px;
+  }
+  .calcResult{
+    display:none;
+  }
+
+  select {
+    width: 60px;
+  }
+  input[type="text"] {
+    width: 60px;
+  }

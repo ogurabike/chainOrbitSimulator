@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <title>チェーン軌道シミュレータ</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body onload="F1_setVal()">
-    <h1>チェーン軌道シミュレータ</h1>
+    <h1><center>チェーン軌道シミュレータ</center></h1>
     <script src="main.js"></script>
+    <script src="orbit.js"></script>
     <form name="F1" action="#">
         <table border="1">
             <thead>
@@ -20,8 +22,8 @@
                     <th colspan="2"></th>
                     <th>変数名</th>
                     <th>値</th>
-                    <th>unit</th>
-                    <th>記号</th>
+                    <th class="unit">unit</th>
+                    <th class="symbol">記号</th>
                 </tr>
             </thead>
         
@@ -171,153 +173,139 @@
                     <td>mm</td>
                     <td>R0</td>
                 </tr>
+                <tr>
+                    <td rowspan="2">部品中心間</br>距離</td>
+                    <td>チェーンステー</br>　⇔チェーンピン</td>
+                    <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_setVal()"></td>
+                    <td>mm</td>
+                    <td>d'0</td>
+                </tr>
                     <tr>
-                        <td rowspan="2">部品中心間</br>距離</td>
-                        <td>チェーンステー</br>　⇔チェーンピン</td>
-                        <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_setVal()"></td>
+                        <td>チェーンステー</br>　⇔プーリー</br>( ≒ d'0 + D3/2 )</td>
+                        <td><label id="F1_label_d0"></label></td>
                         <td>mm</td>
-                        <td>d'0</td>
+                        <td>d0</td>
                     </tr>
-                        <tr>
-                            <td>チェーンステー</br>　⇔プーリー</br>（ ≒ d'0 + D3/2 ）</td>
-                            <td><label id="F1_label_d0"></label></td>
-                            <td>mm</td>
-                            <td>d0</td>
-                        </tr>
+                <tr>
+                    <td rowspan="2">テンション</br>プーリー</td>
+                    <td>歯数</td>
+                    <td>
+                        <select id="F1_select_tpt" onchange="F1_setVal()">
+                            <option value="10">10</option>
+                            <option value="11" selected>11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                        </select>
+                    </td>
+                    <td>T</td>
+                    <td></td>
+                </tr>
                     <tr>
-                        <td rowspan="2">テンション</br>プーリー</td>
-                        <td>歯数</td>
-                        <td>
-                            <select id="F1_select_tpt" onchange="F1_setVal()">
-                                <option value="10">10</option>
-                                <option value="11" selected>11</option>
-                                <option value="12">12</option>
-                                <option value="13">13</option>
-                                <option value="14">14</option>
-                                <option value="15">15</option>
-                                <option value="16">16</option>
-                                <option value="17">17</option>
-                            </select>
-                        </td>
-                        <td>T</td>
-                        <td></td>
+                        <td>ピッチ円直径</td>
+                        <td><label id="F1_label_d3"></label></td>
+                        <td>mm</td>
+                        <td>D3</td>
                     </tr>
-                        <tr>
-                            <td>ピッチ円直径</td>
-                            <td><label id="F1_label_d3"></label></td>
-                            <td>mm</td>
-                            <td>D3</td>
-                        </tr>
-                    <tr>
-                        <td colspan="6"><center><img src="./chainOrbit.jpg" width="600px"></center></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6">　</td>
-                    </tr>
-                    <tr>
-                        <td colspan="6">
-                            <center>
-                                <INPUT type="button" id="F1_BTN_startCalcAndOpti" value="軌道計算" onClick="startCalcAndOpti()">
-                            </center>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6">　</td>
-                    </tr>
+                <tr>
+                    <td colspan="6" class="chart"><img src="./chainOrbit.jpg" width="600px"></td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <center>
+                            <INPUT type="button" id="F1_BTN_startCalcAndOpti" value="軌道計算" onClick="startCalcAndOpti()">
+                        </center>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="calcResult" id="calcResultTbl">
                 <tr>
                     <th colspan="6" style="text-align:left">計算結果</th>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td colspan="2"></td>
-                    <td></td>
-                    <td>unit</td>
-                    <td></td>
-                </tr>
-                <tr>
                     <td rowspan="6">Sim-1</td>
                     <td colspan="2">チェーンステー長</td>
-                    <td><label id="F1_label_dlcs"></label></td>
+                    <td><label id="F1_label_dlcs_sim1"></label></td>
                     <td>mm</td>
                     <td>dlcs</td>
                 </tr>
                 <tr>
                     <td colspan="2">チェーンコマ数</td>
-                    <td><label id="F1_label_nc"></label></td>
+                    <td><label id="F1_label_nc_sim1"></label></td>
                     <td>pcs.</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td colspan="2">開始コマと終端コマの距離</td>
-                    <td><label id="F1_label_dist"></label></td>
+                    <td><label id="F1_label_dist_sim1"></label></td>
                     <td>mm</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td rowspan="2">部品中心間</br>距離</td>
                     <td>チェーンステー</br>　⇔チェーンピン</td>
-                    <td><label id="F1_label_dd0_1"></label></td>
+                    <td><label id="F1_label_dd0_sim1"></label></td>
                     <td>mm</td>
                     <td>d'0</td>
                 </tr>
                 <tr>
-                    <td>チェーンステー</br>　⇔プーリー</br>（ ≒ d'0 + D3/2 ）</td>
-                    <td><label id="F1_label_d0_1"></label></td>
+                    <td>チェーンステー</br>　⇔プーリー</br>( ≒ d'0 + D3/2 )</td>
+                    <td><label id="F1_label_d0_sim1"></label></td>
                     <td>mm</td>
                     <td>d0</td>
                 </tr>
                 <tr>
                     <td colspan="2">チェーンテンショナースイング角</td>
-                    <td><label id="F1_label_swangle"></label></td>
+                    <td><label id="F1_label_swangle_sim1"></label></td>
                     <td>degree</td>
                     <td>θ0</td>
                 </tr>
                 <tr>
-                    <td colspan="6">　</td>
-                </tr>
-                <tr>
-                    <td rowspan="6">Sim-2</td>
+                    <td rowspan="6">Sim-2</br>(※1)</td>
                     <td colspan="2">最長チェーンステー長</td>
-                    <td><label id="F1_label_maxdlcs"></label></td>
+                    <td><label id="F1_label_dlcs_sim2"></label></td>
                     <td>mm</td>
                     <td>dlcs</td>
                 </tr>
                 <tr>
                     <td colspan="2">チェーンコマ数</td>
-                    <td><label id="F1_label_nc_2"></label></td>
+                    <td><label id="F1_label_nc_sim2"></label></td>
                     <td>pcs.</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td colspan="2">開始コマと終端コマの距離</td>
-                    <td><label id="F1_label_dist_2"></label></td>
+                    <td><label id="F1_label_dist_sim2"></label></td>
                     <td>mm</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td rowspan="2">部品中心間</br>距離</td>
                     <td>チェーンステー</br>　⇔チェーンピン</td>
-                    <td><label id="F1_label_dd0_2"></label></td>
+                    <td><label id="F1_label_dd0_sim2"></label></td>
                     <td>mm</td>
                     <td>d'0</td>
                 </tr>
                 <tr>
-                    <td>チェーンステー</br>　⇔プーリー</br>（ ≒ d'0 + D3/2 ）</td>
-                    <td><label id="F1_label_d0_2"></label></td>
+                    <td>チェーンステー</br>　⇔プーリー</br>( ≒ d'0 + D3/2 )</td>
+                    <td><label id="F1_label_d0_sim2"></label></td>
                     <td>mm</td>
                     <td>d0</td>
                 </tr>
                 <tr>
                     <td colspan="2">チェーンテンショナースイング角</td>
-                    <td><label id="F1_label_swangle_2"></label></td>
+                    <td><label id="F1_label_swangle_sim2"></label></td>
                     <td>degree</td>
                     <td>θ0</td>
                 </tr>
                 <tr>
-                    <td colspan="6">　</td>
+                    <td colspan="6">※1 Sim-1と同じ長さのチェーンを目いっぱい張った時の最長チェーンステー長</td>
                 </tr>
                 <tr>
-                    <td colspan="6">
+                    <td colspan="6" class="chart">
                         <div style="width:600px">
                             <canvas id="mychart-scatter"></canvas>
                         </div>
@@ -327,28 +315,25 @@
                     <td colspan="6">　<label id="F1_label_returnMsg"></label></td>
                 </tr>
                 <tr>
-                    <td colspan="6">　</td>
-                </tr>
-                <tr>
                     <th colspan="6" style="text-align:left">テンションスプリング仕様</th>
                 </tr>
                 <tr>
                     <td rowspan="3" colspan="2">チェーンテンショナー</br>スイング角</td>
                     <td>Sim-1</td>
-                    <td><label id="F1_label_swangle__2"></label></td>
+                    <td><label id="F1_label_swangle_sim1_2"></label></td>
                     <td rowspan="3">degree</td>
                     <td rowspan="3">θ0</td>
                 </tr>
                 <tr>
                     <td>Sim-2</td>
-                    <td><label id="F1_label_swangle_2__2"></label></td>
+                    <td><label id="F1_label_swangle_sim2_2"></label></td>
                 </tr>
                 <tr>
                     <td>Δθ0</td>
                     <td><label id="F1_label_delta_swangle"></label></td>
                 </tr>
                 <tr>
-                    <td colspan="3">テンションスプリング固定位置</td>
+                    <td colspan="3">テンションスプリング固定位置</br></br>※ 数値を変更する場合は入力欄に入力後、</br>　 リターンキーを押してください。</td>
                     <td>
                         <input type="text" id="F1_input_rs" value="56.0"  onchange="setDeflection()">
                         <INPUT type="button" id="F1_BTN_rs_ini" value="初期値" onClick="set_rsIni()">
@@ -357,16 +342,41 @@
                     <td>Rs</td>
                 </tr>
                 <tr>
-                    <td colspan="3">テンションスプリングたわみ量（最大）</td>
+                    <td colspan="3">テンションスプリングたわみ量(最大)</td>
                     <td><label id="F1_label_deflection"></label></td>
                     <td>mm</td>
                     <td>Lmax</td>
                 </tr>
                 <tr>
-                    <td colspan="6"><center><img src="./chainDevice.jpg" width="600px"></center></td>
+                    <td colspan="6" class="chart"><img src="./chainDevice.jpg" width="600px"></td>
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
                 </tr>
             </tbody>
         </table>
+        
+        <input type="hidden" id="hidden_F1_label_d1" value="">
+        <input type="hidden" id="hidden_F1_label_d2" value="">
+        <input type="hidden" id="hidden_F1_label_d3" value="">
+        <input type="hidden" id="hidden_F1_label_d0" value="">
+        <input type="hidden" id="hidden_F1_label_dlcs_sim1" value="">
+        <input type="hidden" id="hidden_F1_label_nc_sim1" value="">
+        <input type="hidden" id="hidden_F1_label_dist_sim1" value="">
+        <input type="hidden" id="hidden_F1_label_dd0_sim1" value="">
+        <input type="hidden" id="hidden_F1_label_d0_sim1" value="">
+        <input type="hidden" id="hidden_F1_label_swangle_sim1" value="">
+        <input type="hidden" id="hidden_F1_label_dlcs_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_nc_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_dist_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_dd0_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_d0_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_swangle_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_swangle_sim1_2" value="">
+        <input type="hidden" id="hidden_F1_label_swangle_sim2_2" value="">
+        <input type="hidden" id="hidden_F1_label_delta_swangle" value="">
+        <input type="hidden" id="hidden_F1_label_deflection" value="">
+
     </form>
 </body>
 </html>
