@@ -53,12 +53,16 @@ function startCalcAndOpti() {
 
   document.getElementById("calcResultTbl").style.display="table-row-group";
 
-  let dd0 = parseFloat(document.getElementById("F1_input_dd0").value);    //部品中心間最小距離(チェーンステー⇔チェーンピン)
   let returnMsg;
 
   let obt1 = new orbit;
   F1_getVal(obt1);
-  if (obt1.isContact() == false) {
+  if (obt1.pulleyPositionCheck(1) == false) {
+    returnMsg = "	d'0中心間最小距離(チェーンステー⇔チェーンピン)が小さすぎます。上側チェーンと下側チェーンが干渉してしまいます。";
+    document.getElementById("F1_label_returnMsg").innerText = returnMsg;
+    return;
+  }
+  if (obt1.pulleyPositionCheck(2) == false) {
     returnMsg = "	d'0中心間最小距離(チェーンステー⇔チェーンピン)が大きすぎます。チェーンとプーリーは接触しません。";
     document.getElementById("F1_label_returnMsg").innerText = returnMsg;
     return;
@@ -70,54 +74,50 @@ function startCalcAndOpti() {
   //仮計算した軌道からチェーンのコマ数を決定
   let nc = obt1.optimumLinkNumber();
 
-  //console.log(obt1.px[2]);
-  //console.log(obt1.py[2]);
-
+  //最適化されたチェーンのコマ数をもとに、テンションプーリーの位置を最適化(ここでobt1のチェーン軌道が最終決定される)
   let d00 = obt1.d0;
+  if ((obt1.set_d0Min(nc)) && !(obt1.d0 == d00)) {
+    returnMsg = "\n\nなお、d'0中心間最小距離(チェーンステー⇔チェーンピン)は、以下の通り最適化されています。\n"
+      + varFormat(d00 - obt1.r3,"0.0") + "mm→" + varFormat(obt1.d0 - obt1.r3,"0.0") + "mm";
 
-  //最適化されたチェーンのコマ数をもとに、テンションプーリーの位置を最適化(チェーン軌道も最終決定)
-  obt1.set_d0Min(nc);
-
-  if (obt1.d0 == 0) {
-
-    returnMsg = "最適化に失敗しました。\n	d'0中心間最小距離(チェーンステー⇔チェーンピン)を見直してください。";
-
+    //d'0中心間最小距離(チェーンステー⇔チェーンピン)を再設定
+    document.getElementById("F1_input_dd0").value = obt1.d0 - obt1.r3;  // r3 = d3/2
+    F1_setVal();  // onchangeイベントを強制実行
   } else {
-    //チェーンがパツパツになるまでチェーンステー長を伸ばした状態のシミュレーション
-    let obt2 = new orbit;
-    F1_getVal(obt2);
-    obt2.setOrbit_dlcsMax(nc);
-
-    //obt1と0bt2のチェーンステー長の差が0.1mm以下になった時は一致したものとしてみなす。
-    let dlcs0 = obt1.dlcs;
-    if (obt2.dlcs - obt1.dlcs < 0.1 ) {
-      obt1 = obt2;
-      obt1.dlcs = dlcs0;
-    }
-
-    returnMsg = "上記セッティングにより、最大" + varFormat(obt2.dlcs - obt1.dlcs,"0.0") + "mmのチェーンステー長の増加が吸収可能です。";
-
-    if (obt1.d0 == d00) {
-      returnMsg = returnMsg + "\n\n最適化の必要はありません。\n"
-        + "チェーンコマ数=" + nc + "pcs.\n"
-        + "チェーン接合部(開始コマと終端コマ)コマ間距離="
-        + varFormat(Math.sqrt((obt1.x[1] - obt1.x[0]) ** 2 + (obt1.y[1] - obt1.y[0]) ** 2), "0.00") + " mm";
-    } else {
-      returnMsg = returnMsg + "\n\nなお、d'0中心間最小距離(チェーンステー⇔チェーンピン)は、以下の通り最適化されています。\n" + varFormat(d00 - obt1.r3,"0.0") + "mm→" + varFormat(obt1.d0 - obt1.r3,"0.0") + "mm";
-      dd0 = obt1.d0 - obt1.r3; // r3 = d3/2
-    }
-
-    //計算結果表示
-    setResultTable(obt1,obt2);
-    
-    //軌道描画
-    drawChart(obt1,obt2);
-
-    //チェーンテンショナースイング角算出
-    setDeflection();
+    returnMsg = "最適化に失敗しました。\n	d'0中心間最小距離(チェーンステー⇔チェーンピン)を見直してください。";
+    document.getElementById("F1_label_returnMsg").innerText = returnMsg;
+    return;
   }
+  
+  //吸収可能なチェーンステー増加量を計算
+  //チェーンがパツパツになるまでチェーンステー長を伸ばした状態のシミュレーション
+  let obt2 = new orbit;
+  F1_getVal(obt2);
+  obt2.setOrbit_dlcsMax(nc);
+
+  //obt1と0bt2のチェーンステー長の差が0.1mm以下になった時は最初からパツパツだったこととする。
+  let dlcs0 = obt1.dlcs;
+  if (obt2.dlcs - obt1.dlcs < 0.1 ) {
+    obt1 = obt2;
+    obt1.dlcs = dlcs0;
+  }
+
+  returnMsg = "上記セッティングにより、最大" + varFormat(obt2.dlcs - obt1.dlcs,"0.0") 
+    + "mmのチェーンステー長の増加が吸収可能です。"
+    + returnMsg;
+
+  //計算結果表示
+  setResultTable(obt1,obt2);
+  
+  //軌道描画
+  drawChart(obt1,obt2);
+
+  //チェーンテンショナースイング角算出
+  setDeflection();
+
   document.getElementById("F1_label_returnMsg").innerText = returnMsg;
-  document.getElementById("F1_input_dd0").value =dd0;
+  //console.log(obt1);
+  //console.log(obt2);
 }
 
 //計算結果表示
