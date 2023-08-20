@@ -91,7 +91,6 @@ class orbit {
                 this.d0 = this.d0 + dlt;
 
                 if (nnn == iterationCount) {
-                    console.log("Line:316 iterationCount max");
                     this.isError=true;
                     return;
                 }
@@ -115,10 +114,7 @@ class orbit {
             dlt = 0.1;
             delta = 0;
             deltamin = deltamin0;
-            //angle1 = Math.PI + Math.abs(Math.atan(this.d0 / Math.sqrt(this.r0 ** 2 - this.d0 ** 2)));
             angle1 = 1 / 2 * Math.PI
-
-            //console.log(",mmm,dlt,angle1,delta,deltamin");
 
             for (let mmm = 1; mmm <= iterationCount; mmm++) {
 
@@ -130,8 +126,6 @@ class orbit {
                         + this.r1
                     )
                 );
-
-                //console.log(","+mmm+","+dlt+","+angle1+","+delta+","+deltamin);
                 
                 p2x = this.r1 * Math.cos(angle1);
                 p2y = this.r1 * Math.sin(angle1);
@@ -147,7 +141,6 @@ class orbit {
                         angle1 = angle1 + dlt;
                     } else if (Math.abs(varFormat(1/dlt,"0")) == iterationCount) {
                         angle1 = angle1 - dlt;
-                        //console.log(","+mmm+","+dlt+","+angle1+","+delta+","+deltamin);
                         break;
                     } else {
                         deltamin = delta;
@@ -159,7 +152,6 @@ class orbit {
                 }
 
                 if (mmm == iterationCount) {
-                    console.log("Line:141 iterationCount max / dlt = "+dlt+" / angle1 = "+angle1+" / delta = "+delta);
                     this.isError=true;
                     return;
                 }
@@ -169,8 +161,6 @@ class orbit {
             p2y = this.r1 * Math.sin(angle1);
             p3x = -Math.sqrt(this.r0 ** 2 - this.d0 ** 2) + this.r3 * Math.abs(Math.cos(angle1));
             p3y = -this.d0 + this.r3 * Math.abs(Math.sin(angle1));
-
-            //console.log("P3 : "+((p3x-c3x)**2 + (p3y-c3y)**2 - this.r3 **2)) ;
             
             this.px[2] = p2x;
             this.py[2] = p2y;
@@ -181,8 +171,6 @@ class orbit {
                 this.px[3] = p3x;
                 this.py[3] = p3y;
             }
-
-            // console.log("P2,P3 deltamin="+deltamin);
 
         } else if (this.orbitType == 2) {
             this.px[2] = this.px[1];
@@ -207,8 +195,6 @@ class orbit {
                     angle2 = 3 / 2 * Math.PI + dlt;
                 }
 
-                //console.log(",mmm,dlt,angle2,delta,deltamin,p4x,p4y,p5x,p5y");
-
                 for (let mmm = 1; mmm <= iterationCount; mmm++) {
                     
                     if (this.d0 < this.r2+this.r3) {
@@ -228,10 +214,6 @@ class orbit {
                             - this.r2
                         )
                     );
-
-                    //console.log(","+mmm+","+dlt+","+angle2+","+delta+","+deltamin
-                    //+","+p4x+","+p4y+","+p5x+","+p5y
-                    //+","+linearfunction(p4x,p4y,p5x,p5y)["slope"]+","+linearfunction(p4x,p4y,p5x,p5y)["intercept"]);
 
                     //C2起点とした時のC3,P4,P5をつなぐベクトルの外積のZ座標の向きを評価する。
                     //C2C3 X C2P4 → 正
@@ -254,7 +236,6 @@ class orbit {
                     }
 
                     if (mmm == iterationCount) {
-                        console.log("Line:229 iterationCount max");
                         this.isError=true;
                         return;
                     }
@@ -269,8 +250,6 @@ class orbit {
             p4y = - this.d0 - this.r3 * Math.sin(angle2);
             p5x = this.r2 * Math.cos(angle2) - this.dlcs;
             p5y = this.r2 * Math.sin(angle2);
-
-            //console.log("P4 : "+((p4x-c3x)**2 + (p4y-c3y)**2 - this.r3 **2)) ;
 
             this.px[4] = p4x;
             this.py[4] = p4y;
@@ -306,24 +285,20 @@ class orbit {
             0, 0, this.r1,
             this.px[1], this.py[1], this.px[2], this.py[2], this.x, this.y,
             this.cp, true);
-        // if (this.orbitType == 1) {console.log("P1→P2終点:" + (this.x.length-1));}
 
         // P2→P5
         if (this.orbitType == 1) {
             //P2→P3
             tangent(this.px[2], this.py[2], this.px[3], this.py[3], this.x, this.y, this.cp);
-            // console.log("P2→P3終点:" + (this.x.length-1));
 
             //P3→P4
             setOnCircumference(
                 c3x, c3y, this.r3,
                 this.px[3], this.py[3], this.px[4], this.py[4], this.x, this.y,
                 this.cp, false);
-            // console.log("P3→P4終点:" + (this.x.length-1));
 
             //P4→P5
             tangent(this.px[4], this.py[4], this.px[5], this.py[5], this.x, this.y, this.cp);
-            // console.log("P4→P5終点:" + (this.x.length-1));
 
         } else if (this.orbitType == 2) {
             // P2→P5
@@ -335,11 +310,9 @@ class orbit {
             -this.dlcs, 0, this.r2,
             this.px[5], this.py[5], this.px[6], this.py[6], this.x, this.y,
             this.cp, true);
-        // if (this.orbitType == 1) {console.log("P5→P6終点:" + (this.x.length-1));}
 
         //P6→P1
         tangent(this.px[6], this.py[6], this.px[1], this.py[1], this.x, this.y, this.cp);
-        // if (this.orbitType == 1) {console.log("P6→P1終点:" + (this.x.length-1));}
 
         //x[0],y[0]に最終コマの座標をセット
         this.x[0] = this.x[this.x.length - 1];
@@ -368,8 +341,6 @@ class orbit {
         let rad = radmax;
         this.d0 = - this.r0 * Math.sin(rad);
 
-        //console.log(",mmm,nc2,nc,d0,rad,dlt,d,dmin");
-
         for (let mmm = 1; mmm <= iterationCount; mmm++) {
             nc = 0;
 
@@ -381,8 +352,6 @@ class orbit {
                 (this.x[1] - this.x[0]) ** 2 
                 + (this.y[1] - this.y[0]) ** 2
                 - this.cp ** 2));
-
-            //console.log(","+mmm+","+nc2+","+nc+","+this.d0+","+rad+","+dlt+","+d+","+dmin);
 
             if (!this.pulleyPositionCheck(2)){
                 rad = rad + dlt;
@@ -440,8 +409,6 @@ class orbit {
             d = Math.abs(
                 (this.x[1] - this.x[0]) ** 2
                 + (this.y[1] - this.y[0]) ** 2- this.cp ** 2);
-            
-            //console.log (","+nnn+","+nc+","+this.dlcs+","+this.px[6]+","+this.py[6]+","+this.px[1]+","+this.py[1]);
             
             if ((dlt > 0 && nc < nc2) || (dlt < 0 && nc > nc2)) {
                 this.dlcs = this.dlcs + dlt;
@@ -678,8 +645,6 @@ function setOnCircumference(
         delta = 0;
         deltamin = deltamin0;
 
-        //console.log(","+x0+","+y0+","+s+","+t+","+x1+","+y1+","+x2+","+y2+","+rad12+","+ndeltarad12);
-
         if (isClockwise) {
             dlt = - 0.01;
         } else {
@@ -691,8 +656,6 @@ function setOnCircumference(
             u = r * Math.cos(angle) + x0;
             v = r * Math.sin(angle) + y0;
             delta = Math.abs((s - u) ** 2 + (t - v) ** 2 - cp ** 2);
-
-            if (mmm == iterationCount) {console.log("Line:518 iterationCount max");}
             
             if (delta <= deltamin) {
                 deltamin = delta;

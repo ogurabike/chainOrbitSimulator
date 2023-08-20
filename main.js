@@ -126,8 +126,6 @@ function startCalcAndOpti() {
   setDeflection();
 
   document.getElementById("F1_label_returnMsg").innerText = returnMsg;
-  //console.log(obt1);
-  //console.log(obt2);
 }
 
 //計算結果表示
