@@ -169,12 +169,18 @@ class orbit {
             p2y = this.r1 * Math.sin(angle1);
             p3x = -Math.sqrt(this.r0 ** 2 - this.d0 ** 2) + this.r3 * Math.abs(Math.cos(angle1));
             p3y = -this.d0 + this.r3 * Math.abs(Math.sin(angle1));
+
+            //console.log("P3 : "+((p3x-c3x)**2 + (p3y-c3y)**2 - this.r3 **2)) ;
             
             this.px[2] = p2x;
             this.py[2] = p2y;
 
-            this.px[3] = p3x;
-            this.py[3] = p3y;
+            if ((this.px[2] == this.px[1])) {
+                this.orbitType = 2;
+            } else {
+                this.px[3] = p3x;
+                this.py[3] = p3y;
+            }
 
             // console.log("P2,P3 deltamin="+deltamin);
 
@@ -201,11 +207,15 @@ class orbit {
                     angle2 = 3 / 2 * Math.PI + dlt;
                 }
 
-                //console.log(",mmm,dlt,angle2,delta,deltamin,pulleyPositionCheck");
+                //console.log(",mmm,dlt,angle2,delta,deltamin,p4x,p4y,p5x,p5y");
 
                 for (let mmm = 1; mmm <= iterationCount; mmm++) {
                     
-                    p4x = - Math.sqrt(this.r0 ** 2 - this.d0 ** 2) + this.r3 * Math.cos(angle2);
+                    if (this.d0 < this.r2+this.r3) {
+                        p4x = - Math.sqrt(this.r0 ** 2 - this.d0 ** 2) - this.r3 * Math.abs(Math.cos(angle2));
+                    } else {
+                        p4x = - Math.sqrt(this.r0 ** 2 - this.d0 ** 2) + this.r3 * Math.abs(Math.cos(angle2));
+                    }
                     p4y = - this.d0 - this.r3 * Math.sin(angle2);
                     p5x = this.r2 * Math.cos(angle2) - this.dlcs;
                     p5y = this.r2 * Math.sin(angle2);
@@ -219,7 +229,9 @@ class orbit {
                         )
                     );
 
-                    //console.log(","+mmm+","+dlt+","+angle2+","+delta+","+deltamin+","+this.pulleyPositionCheck(2));
+                    //console.log(","+mmm+","+dlt+","+angle2+","+delta+","+deltamin
+                    //+","+p4x+","+p4y+","+p5x+","+p5y
+                    //+","+linearfunction(p4x,p4y,p5x,p5y)["slope"]+","+linearfunction(p4x,p4y,p5x,p5y)["intercept"]);
 
                     //C2起点とした時のC3,P4,P5をつなぐベクトルの外積のZ座標の向きを評価する。
                     //C2C3 X C2P4 → 正
@@ -249,10 +261,16 @@ class orbit {
                 }
             }
             
-            p4x = - Math.sqrt(this.r0 ** 2 - this.d0 ** 2) + this.r3 * Math.cos(angle2);
+            if (this.d0 <= this.r2+this.r3) {
+                p4x = - Math.sqrt(this.r0 ** 2 - this.d0 ** 2) - this.r3 * Math.abs(Math.cos(angle2));
+            } else {
+                p4x = - Math.sqrt(this.r0 ** 2 - this.d0 ** 2) + this.r3 * Math.abs(Math.cos(angle2));
+            }
             p4y = - this.d0 - this.r3 * Math.sin(angle2);
             p5x = this.r2 * Math.cos(angle2) - this.dlcs;
             p5y = this.r2 * Math.sin(angle2);
+
+            //console.log("P4 : "+((p4x-c3x)**2 + (p4y-c3y)**2 - this.r3 **2)) ;
 
             this.px[4] = p4x;
             this.py[4] = p4y;
@@ -267,6 +285,20 @@ class orbit {
             this.py[5] = -this.py[6];
         }
         
+        //P3とP4が近づき、両点の距離がチェーンピッチ以下になった時は
+        //プーリー無し軌道(orbitType = 2)と見なす。
+        if (((this.px[4] - this.px[3])**2 + (this.py[4] - this.py[3])**2) <= this.cp**2) {
+            this.px[2] = this.px[1];
+            this.py[2] = -this.py[1];
+            this.px[3] = undefined;
+            this.py[3] = undefined;
+            this.px[4] = undefined;
+            this.py[4] = undefined;
+            this.px[5] = this.px[6];
+            this.py[5] = -this.py[6];
+            this.orbitType = 2
+        }
+
         //P1→P2
         this.x[1] = this.px[1];
         this.y[1] = this.py[1];
@@ -336,6 +368,8 @@ class orbit {
         let rad = radmax;
         this.d0 = - this.r0 * Math.sin(rad);
 
+        //console.log(",mmm,nc2,nc,d0,rad,dlt,d,dmin");
+
         for (let mmm = 1; mmm <= iterationCount; mmm++) {
             nc = 0;
 
@@ -347,6 +381,8 @@ class orbit {
                 (this.x[1] - this.x[0]) ** 2 
                 + (this.y[1] - this.y[0]) ** 2
                 - this.cp ** 2));
+
+            //console.log(","+mmm+","+nc2+","+nc+","+this.d0+","+rad+","+dlt+","+d+","+dmin);
 
             if (!this.pulleyPositionCheck(2)){
                 rad = rad + dlt;
@@ -405,6 +441,8 @@ class orbit {
                 (this.x[1] - this.x[0]) ** 2
                 + (this.y[1] - this.y[0]) ** 2- this.cp ** 2);
             
+            //console.log (","+nnn+","+nc+","+this.dlcs+","+this.px[6]+","+this.py[6]+","+this.px[1]+","+this.py[1]);
+            
             if ((dlt > 0 && nc < nc2) || (dlt < 0 && nc > nc2)) {
                 this.dlcs = this.dlcs + dlt;
             } else if (nc == nc2) {
@@ -438,24 +476,38 @@ class orbit {
     
         // 最適化不要時の処理
         if (this.isHalfChain) {
-            if (Math.abs((this.x[1] - this.x[0]) ** 2 + (this.y[1] - this.y[0]) ** 2 - this.cp ** 2) <= 0.1) {
+            if (Math.abs((this.x[1] - this.x[0]) ** 2 + (this.y[1] - this.y[0]) ** 2 - this.cp ** 2) <= 0.001) {
                 return nc;
             }
         } else if (Math.ceil(nc / 2) == nc / 2
-            && Math.abs((this.x[1] - this.x[0]) ** 2 + (this.y[1] - this.y[0]) ** 2 - this.cp ** 2) <= 0.1) {
+            && Math.abs((this.x[1] - this.x[0]) ** 2 + (this.y[1] - this.y[0]) ** 2 - this.cp ** 2) <= 0.001) {
             
             return nc;
         }
     
         // コマ数調整
-        if (this.isHalfChain) {
-            nc = nc - 1;   //半コマチェーンの時は１コマ詰める
+        // プーリー有りの場合(this.orbitType==1)は詰めて調整
+        // プーリー無しの場合(this.orbitType==2)は足して調整
+        if (this.orbitType==1) {
+            if (this.isHalfChain) {
+                nc = nc - 1;   //半コマチェーンの時は１コマ詰める
+            } else {
+                if (Math.ceil(nc / 2) == nc / 2) {
+                    nc = nc - 2; //標準ピッチでコマ数が偶数の時は2コマ詰める
+                } else {
+                    nc = nc - 1; //標準ピッチでコマ数が奇数の時は1コマ詰める
+                }
+            }
         } else {
-        if (Math.ceil(nc / 2) == nc / 2) {
-            nc = nc - 2; //標準ピッチでコマ数が偶数の時は2コマ詰める
-        } else {
-            nc = nc - 1; //標準ピッチでコマ数が奇数の時は1コマ詰める
-        }
+            if (this.isHalfChain) {
+                nc = nc + 1;   //半コマチェーンの時は１コマ足す
+            } else {
+                if (Math.ceil(nc / 2) == nc / 2) {
+                    nc = nc + 2; //標準ピッチでコマ数が偶数の時は2コマ足す
+                } else {
+                    nc = nc + 1; //標準ピッチでコマ数が奇数の時は1コマ足す
+                }
+            }
         }
         return nc;
     }
@@ -523,6 +575,7 @@ class orbit {
 //共通関数
 
 //円周上に指定ピッチで点を配置するプログラム
+// 始点(x1,y1) → 終点(x2,y2)
 function setOnCircumference(
     x0, y0,
     r,
@@ -622,12 +675,15 @@ function setOnCircumference(
         s = x[nc];
         t = y[nc];
         let deltamin0 = 10000000000;
-        dlt = 0.1;
         delta = 0;
         deltamin = deltamin0;
 
-        if (!(isClockwise)) {
-            dlt = - dlt;
+        //console.log(","+x0+","+y0+","+s+","+t+","+x1+","+y1+","+x2+","+y2+","+rad12+","+ndeltarad12);
+
+        if (isClockwise) {
+            dlt = - 0.01;
+        } else {
+            dlt = 0.01;
         }
         angle = rad1;
 
@@ -640,16 +696,14 @@ function setOnCircumference(
             
             if (delta <= deltamin) {
                 deltamin = delta;
-                angle = angle - dlt;
-            } else if (Math.abs(varFormat(1/dlt,"0")) == iterationCount) {
                 angle = angle + dlt;
+            } else if (Math.abs(varFormat(1/dlt,"0")) == iterationCount) {
+                angle = angle - dlt;
                 break;
             } else {
-                angle = angle + 2 * dlt;
-                dlt = dlt/10;
-                u = r * Math.cos(angle) + x0;
-                v = r * Math.sin(angle) + y0;
-                deltamin = Math.abs((s - u) ** 2 + (t - v) ** 2 - cp ** 2);
+                deltamin = delta;
+                dlt = - dlt/10;
+                angle = angle + dlt;
             }
         }
         
@@ -658,28 +712,24 @@ function setOnCircumference(
         y[nc] = r * Math.sin(angle) + y0;
         
         //残りの点を配置する。
-        for (let mmm = 1; mmm <= ndeltarad12; mmm++) {
+        do {
         
             if (isClockwise) {
                 angle = angle - deltarad12;
-                if (rad1 > rad2 && angle < rad2) {
-                    break;
-                } else if (rad1 < rad2 && angle < rad2 - 2 * Math.PI) {
-                    break;
-                }
             } else {
                 angle = angle + deltarad12;
-                if (rad1 < rad2 && angle > rad2) {
-                    break;
-                } else if (rad1 > rad2 && angle > rad2 + 2 * Math.PI) {
-                    break;
-                }
             }
-        
+            
             nc = nc + 1;
             x[nc] = r * Math.cos(angle) + x0;
             y[nc] = r * Math.sin(angle) + y0;
-        }
+
+        } while (
+            (
+                (x2 - (r * Math.cos(angle) + x0)) ** 2 
+                + (y2 - (r * Math.sin(angle) + y0)) ** 2
+            ) >= cp**2
+        );
     }
 
 //両端を指定された接線上に指定ピッチで点を配置するプログラム

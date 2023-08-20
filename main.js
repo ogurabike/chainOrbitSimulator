@@ -68,11 +68,21 @@ function startCalcAndOpti() {
     return;
   }
 
+  //最小のチェーンコマ数の確認
+  obt1.orbitType = 2;
+  obt1.setOrbit();
+  let nc_min = obt1.optimumLinkNumber();
+
+  F1_getVal(obt1);
   obt1.orbitType = 1;
   obt1.setOrbit();
 
   //仮計算した軌道からチェーンのコマ数を決定
   let nc = obt1.optimumLinkNumber();
+
+  if (nc < nc_min) {
+    nc = nc_min;
+  }
 
   //最適化されたチェーンのコマ数をもとに、テンションプーリーの位置を最適化(ここでobt1のチェーン軌道が最終決定される)
   let d00 = obt1.d0;
