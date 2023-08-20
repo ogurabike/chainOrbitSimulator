@@ -1,4 +1,6 @@
 
+var myChart;
+
 //テーブルの更新
 function F1_setVal() {
   let cp = parseFloat(document.getElementById("F1_label_cp").innerText);  //チェーンピッチ
@@ -159,6 +161,10 @@ function setResultTable(obt1,obt2) {
 
 //軌道描画
 function drawChart(obt1,obt2) {
+  //すでにグラフが存在すれば消す
+  if (myChart){
+    myChart.destroy();
+  }
 
   //チャート作成
   let ret1 = [];
@@ -172,7 +178,7 @@ function drawChart(obt1,obt2) {
   }
 
   var ctx = document.getElementById('mychart-scatter');
-  var myChart = new Chart(ctx, {
+  myChart = new Chart(ctx, {
     type: 'bubble',
     data: {
       datasets: [{
