@@ -438,6 +438,10 @@ class orbit {
     }
 
     // チェーンコマ数の最適化
+    // 最終コマと先頭コマの距離がチェーンピッチに等しい場合は最適化不要と判断し、チェーンコマ数は変更なし
+    // それ以外の場合
+    // 　プーリー有りの場合(this.orbitType==1)はチェーンを詰め、プーリーを下げて調整
+    // 　プーリー無しの場合(this.orbitType==2)はチェーンを足し、チェーンステー長を伸ばして調整
     optimumLinkNumber(){
         let nc = this.x.length - 1;
     
@@ -453,8 +457,6 @@ class orbit {
         }
     
         // コマ数調整
-        // プーリー有りの場合(this.orbitType==1)は詰めて調整
-        // プーリー無しの場合(this.orbitType==2)は足して調整
         if (this.orbitType==1) {
             if (this.isHalfChain) {
                 nc = nc - 1;   //半コマチェーンの時は１コマ詰める
