@@ -162,15 +162,15 @@ function setResultTable(obt1,obt2) {
   let dist_2 = Math.sqrt((obt2.x[1] - obt2.x[0]) ** 2 + (obt2.y[1] - obt2.y[0]) ** 2);
   let swangle_2 = vbDegrees(Math.atan(obt2.d0 / Math.sqrt(obt2.r0 ** 2 - obt2.d0 ** 2)));
 
-  setInnerText(obt2.dlcs,"F1_label_dlcs_sim2","0.0");
-  setInnerText(nc_2,"F1_label_nc_sim2","0");
-  setInnerText(dist_2,"F1_label_dist_sim2","0.0");
-  setInnerText(obt2.d0-obt2.r3,"F1_label_dd0_sim2","0.0");
-  setInnerText(obt2.d0,"F1_label_d0_sim2","0.0");
-  setInnerText(swangle_2,"F1_label_swangle_sim2","0.0");
+  setInnerText(obt2.dlcs,"F1_label_dlcs_sim3","0.0");
+  setInnerText(nc_2,"F1_label_nc_sim3","0");
+  setInnerText(dist_2,"F1_label_dist_sim3","0.0");
+  setInnerText(obt2.d0-obt2.r3,"F1_label_dd0_sim3","0.0");
+  setInnerText(obt2.d0,"F1_label_d0_sim3","0.0");
+  setInnerText(swangle_2,"F1_label_swangle_sim3","0.0");
 
   setInnerText(swangle,"F1_label_swangle_sim1_2","0.0");
-  setInnerText(swangle_2,"F1_label_swangle_sim2_2","0.0");
+  setInnerText(swangle_2,"F1_label_swangle_sim3_2","0.0");
   setInnerText(Math.abs(swangle-swangle_2),"F1_label_delta_swangle","0.0");
 }
 

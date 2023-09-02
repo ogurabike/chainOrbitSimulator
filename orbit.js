@@ -392,7 +392,7 @@ class orbit {
         return false;
     }
     
-    //最長チェーンステー長計算_Sim2
+    //最長チェーンステー長計算_Sim3
     setOrbit_dlcsMax(nc2) {
     
         // チェーンステー長導出
