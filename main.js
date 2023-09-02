@@ -117,26 +117,26 @@ function startCalcAndOpti() {
     
     //吸収可能なチェーンステー増加量を計算
     //チェーンがパツパツになるまでチェーンステー長を伸ばした状態のシミュレーション
-    let obt2 = new orbit;
-    F1_getVal(obt2);
-    obt2.setOrbit_dlcsMax(nc);
+    let obt3 = new orbit;
+    F1_getVal(obt3);
+    obt3.setOrbit_dlcsMax(nc);
 
-    //obt1と0bt2のチェーンステー長の差が0.1mm以下になった時は最初からパツパツだったこととする。
+    //obt1とobt3のチェーンステー長の差が0.1mm以下になった時は最初からパツパツだったこととする。
     let dlcs0 = obt1.dlcs;
-    if (obt2.dlcs - obt1.dlcs < 0.1 ) {
-      obt1 = obt2;
+    if (obt3.dlcs - obt1.dlcs < 0.1 ) {
+      obt1 = obt3;
       obt1.dlcs = dlcs0;
     }
 
-    returnMsg = "上記セッティングにより、最大" + varFormat(obt2.dlcs - obt1.dlcs,"0.0") 
+    returnMsg = "上記セッティングにより、最大" + varFormat(obt3.dlcs - obt1.dlcs,"0.0") 
       + "mmのチェーンステー長の増加が吸収可能です。"
       + returnMsg;
 
     //計算結果表示
-    setResultTable(obt1,obt2);
+    setResultTable(obt1,obt3);
     
     //軌道描画
-    drawChart(obt1,obt2);
+    drawChart(obt1,obt3);
 
     //チェーンテンショナースイング角算出
     setDeflection();
@@ -146,7 +146,7 @@ function startCalcAndOpti() {
 }
 
 //計算結果表示
-function setResultTable(obt1,obt2) {
+function setResultTable(obt1,obt3) {
   let nc = obt1.x.length - 1;
   let dist = Math.sqrt((obt1.x[1] - obt1.x[0]) ** 2 + (obt1.y[1] - obt1.y[0]) ** 2);
   let swangle = vbDegrees(Math.atan(obt1.d0 / Math.sqrt(obt1.r0 ** 2 - obt1.d0 ** 2)));
@@ -158,24 +158,24 @@ function setResultTable(obt1,obt2) {
   setInnerText(obt1.d0,"F1_label_d0_sim1","0.0");
   setInnerText(swangle,"F1_label_swangle_sim1","0.0");
   
-  let nc_2 = obt2.x.length - 1;
-  let dist_2 = Math.sqrt((obt2.x[1] - obt2.x[0]) ** 2 + (obt2.y[1] - obt2.y[0]) ** 2);
-  let swangle_2 = vbDegrees(Math.atan(obt2.d0 / Math.sqrt(obt2.r0 ** 2 - obt2.d0 ** 2)));
+  let nc_3 = obt3.x.length - 1;
+  let dist_3 = Math.sqrt((obt3.x[1] - obt3.x[0]) ** 2 + (obt3.y[1] - obt3.y[0]) ** 2);
+  let swangle_3 = vbDegrees(Math.atan(obt3.d0 / Math.sqrt(obt3.r0 ** 2 - obt3.d0 ** 2)));
 
-  setInnerText(obt2.dlcs,"F1_label_dlcs_sim3","0.0");
-  setInnerText(nc_2,"F1_label_nc_sim3","0");
-  setInnerText(dist_2,"F1_label_dist_sim3","0.0");
-  setInnerText(obt2.d0-obt2.r3,"F1_label_dd0_sim3","0.0");
-  setInnerText(obt2.d0,"F1_label_d0_sim3","0.0");
-  setInnerText(swangle_2,"F1_label_swangle_sim3","0.0");
+  setInnerText(obt3.dlcs,"F1_label_dlcs_sim3","0.0");
+  setInnerText(nc_3,"F1_label_nc_sim3","0");
+  setInnerText(dist_3,"F1_label_dist_sim3","0.0");
+  setInnerText(obt3.d0-obt3.r3,"F1_label_dd0_sim3","0.0");
+  setInnerText(obt3.d0,"F1_label_d0_sim3","0.0");
+  setInnerText(swangle_3,"F1_label_swangle_sim3","0.0");
 
   setInnerText(swangle,"F1_label_swangle_sim1_2","0.0");
-  setInnerText(swangle_2,"F1_label_swangle_sim3_2","0.0");
-  setInnerText(Math.abs(swangle-swangle_2),"F1_label_delta_swangle","0.0");
+  setInnerText(swangle_3,"F1_label_swangle_sim3_2","0.0");
+  setInnerText(Math.abs(swangle-swangle_3),"F1_label_delta_swangle","0.0");
 }
 
 //軌道描画
-function drawChart(obt1,obt2) {
+function drawChart(obt1,obt3) {
   //すでにグラフが存在すれば消す
   if (myChart){
     myChart.destroy();
@@ -188,8 +188,8 @@ function drawChart(obt1,obt2) {
   }
 
   let ret2 = [];
-  for (let mmm = 0; mmm < obt2.x.length; mmm++) {
-    ret2[mmm] = { x: obt2.x[mmm], y: obt2.y[mmm] };
+  for (let mmm = 0; mmm < obt3.x.length; mmm++) {
+    ret2[mmm] = { x: obt3.x[mmm], y: obt3.y[mmm] };
   }
 
   var ctx = document.getElementById('mychart-scatter');
