@@ -202,7 +202,7 @@ function drawChart(obt1,obt2) {
         backgroundColor: '#f88',
       },
       {
-        label: 'Sim-2',
+        label: 'Sim-3',
         data: ret2,
         backgroundColor: '#f00',
       }],
