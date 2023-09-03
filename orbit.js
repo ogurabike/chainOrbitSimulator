@@ -74,29 +74,6 @@ class orbit {
         this.px[1] = -this.r1 * (this.r1 - this.r2) / this.dlcs;
         this.py[1] = this.r1 * Math.sqrt(this.dlcs ** 2 - (this.r1 - this.r2) ** 2) / this.dlcs;
 
-        // チェーンステー長を伸ばしてチェーンをパツパツにした時（プーリー無し軌道）のプーリーの位置を導出
-        if (this.orbitType == 2) {
-            dlt = 10.0;
-            for (let nnn = 0; nnn <= iterationCount; nnn++) {
-                
-                if (this.pulleyPositionCheck(2) == false) {
-                    this.d0 = this.d0 - 2.1 * dlt;
-                    dlt = dlt/10;
-                    if (Math.abs(varFormat(1/dlt,"0")) == iterationCount) {
-                        this.d0 = this.d0 - dlt;
-                        break;
-                    }
-                }
-
-                this.d0 = this.d0 + dlt;
-
-                if (nnn == iterationCount) {
-                    this.isError=true;
-                    return;
-                }
-            }
-        }
-
         // プーリー位置に矛盾がある場合は計算はしない
         if (this.orbitType == 1) {
             if (this.pulleyPositionCheck(1) == false) {
@@ -278,6 +255,29 @@ class orbit {
             this.orbitType = 2
         }
 
+        // チェーンステー長を伸ばしてチェーンをパツパツにした時（プーリー無し軌道）のプーリーの位置を導出
+        if (this.orbitType == 2) {
+            dlt = 10.0;
+            for (let nnn = 0; nnn <= iterationCount; nnn++) {
+                
+                if (this.pulleyPositionCheck(2) == false) {
+                    this.d0 = this.d0 - 2.1 * dlt;
+                    dlt = dlt/10;
+                    if (Math.abs(varFormat(1/dlt,"0")) == iterationCount) {
+                        this.d0 = this.d0 - dlt;
+                        break;
+                    }
+                }
+
+                this.d0 = this.d0 + dlt;
+
+                if (nnn == iterationCount) {
+                    this.isError=true;
+                    return;
+                }
+            }
+        }
+
         //P1→P2
         this.x[1] = this.px[1];
         this.y[1] = this.py[1];
@@ -313,6 +313,12 @@ class orbit {
 
         //P6→P1
         tangent(this.px[6], this.py[6], this.px[1], this.py[1], this.x, this.y, this.cp);
+        
+        //集積誤差から開始点と終点が重なった場合、0.001ミリ以内は誤差とし、削除する
+        if (Math.sqrt((this.x[1]-this.x[this.x.length - 1])**2 + (this.y[1]-this.y[this.y.length - 1])**2) < 0.01 ) {
+            this.x.pop();
+            this.y.pop();
+        }
 
         //x[0],y[0]に最終コマの座標をセット
         this.x[0] = this.x[this.x.length - 1];
@@ -361,7 +367,12 @@ class orbit {
                     rad = rad + dlt;
                     this.d0 = - this.r0 * Math.sin(rad);
                 } else if (nc == nc2) {
-                    if (d <= dmin) {
+                    if (this.orbitType==2) {
+                        //P3とP4が近づき、両点の距離がチェーンピッチ以下になり
+                        //プーリー無し軌道(orbitType = 2)と判定された時の処理
+                        //(d0はsetOrbit内で自動的に再計算されるので最適化は不要)
+                        return true; 
+                    } else if (d <= dmin) {
                         dmin=d;
                         rad = rad + dlt;
                         this.d0 = - this.r0 * Math.sin(rad);
@@ -369,7 +380,6 @@ class orbit {
 
                         rad = rad - dlt;
                         this.d0 = - this.r0 * Math.sin(rad);
-
                         this.orbitType = 1;
                         this.setOrbit();
 
@@ -387,9 +397,13 @@ class orbit {
                     this.d0 = - this.r0 * Math.sin(rad);
                 }
             } 
+
+            if (Math.abs(dlt) < (1/iterationCount/10)) {
+                // 最終的に最適値が見つからなかった時の処理
+                this.isError=true;
+                return false;
+            }
         }
-        this.isError=true;
-        return false;
     }
     
     //最長チェーンステー長計算_Sim3
@@ -698,6 +712,7 @@ function setOnCircumference(
     }
 
 //両端を指定された接線上に指定ピッチで点を配置するプログラム
+// 始点(p1x,p1y) → 終点(p2x,p2y)
 function tangent(
     p1x, p1y,
     p2x, p2y,
