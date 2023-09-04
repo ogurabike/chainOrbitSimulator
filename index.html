@@ -224,7 +224,7 @@
                     <th colspan="6" style="text-align:left">計算結果</th>
                 </tr>
                 <tr>
-                    <td rowspan="6">Sim-1</td>
+                    <td rowspan="5">Sim-1</td>
                     <td colspan="2">チェーンステー長</td>
                     <td><label id="F1_label_dlcs_sim1"></label></td>
                     <td>mm</td>
@@ -256,13 +256,71 @@
                     <td>d0</td>
                 </tr>
                 <tr>
+                    <td rowspan="5">Sim-3</br>(※1)</td>
+                    <td colspan="2">最長チェーンステー長</td>
+                    <td><label id="F1_label_dlcs_sim3"></label></td>
+                    <td>mm</td>
+                    <td>dlcs</td>
+                </tr>
+                <tr>
+                    <td colspan="2">チェーンコマ数</td>
+                    <td><label id="F1_label_nc_sim3"></label></td>
+                    <td>pcs.</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2">開始コマと終端コマの距離</td>
+                    <td><label id="F1_label_dist_sim3"></label></td>
+                    <td>mm</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td rowspan="2">部品中心間</br>距離</td>
+                    <td>チェーンステー</br>　⇔チェーンピン</td>
+                    <td><label id="F1_label_dd0_sim3"></label></td>
+                    <td>mm</td>
+                    <td>d'0</td>
+                </tr>
+                <tr>
+                    <td>チェーンステー</br>　⇔プーリー</br>( ≒ d'0 + D3/2 )</td>
+                    <td><label id="F1_label_d0_sim3"></label></td>
+                    <td>mm</td>
+                    <td>d0</td>
+                </tr>
+                <tr>
+                    <td colspan="6">※1 Sim-1と同じ長さのチェーンを目いっぱい張った時のチェーン軌道</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="chart">
+                        <div style="width:600px">
+                            <canvas id="mychart-scatter"></canvas>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">　<label id="F1_label_returnMsg"></label></td>
+                </tr>
+                <tr>
+                    <th colspan="6" style="text-align:left">テンションスプリング仕様</th>
+                </tr>
+                <tr>
+                    <td colspan="3">テンションスプリング固定位置</br></br>※ 数値を変更する場合は入力欄に入力後、</br>　 リターンキーを押してください。</td>
+                    <td>
+                        <input type="text" id="F1_input_rs" value="56.0"  onchange="setDeflection()">
+                        <INPUT type="button" id="F1_BTN_rs_ini" value="初期値" onClick="set_rsIni()">
+                    </td>
+                    <td>mm</td>
+                    <td>Rs</td>
+                </tr>
+                <tr>
+                    <td>初期状態</br>(Sim-1)</td>
                     <td colspan="2">チェーンテンショナースイング角</td>
                     <td><label id="F1_label_swangle_sim1"></label></td>
                     <td>degree</td>
                     <td>θ0</td>
                 </tr>
                 <tr>
-                    <td rowspan="6">Sim-2</td>
+                    <td rowspan="8">Sim-2</br>(※2)</td>
                     <td colspan="2">チェーンステー長</td>
                     <td>
                         <input type="text" id="F1_input_dlcs_sim2">
@@ -297,92 +355,35 @@
                     <td>d0</td>
                 </tr>
                 <tr>
-                    <td colspan="2">チェーンテンショナースイング角</td>
+                    <td colspan="2" rowspan="2">チェーンテンショナースイング角</td>
                     <td><label id="F1_label_swangle_sim2"></label></td>
-                    <td>degree</td>
+                    <td rowspan="2">degree</td>
                     <td>θ0</td>
                 </tr>
                 <tr>
-                    <td rowspan="6">Sim-3</br>(※1)</td>
-                    <td colspan="2">最長チェーンステー長</td>
-                    <td><label id="F1_label_dlcs_sim3"></label></td>
-                    <td>mm</td>
-                    <td>dlcs</td>
-                </tr>
-                <tr>
-                    <td colspan="2">チェーンコマ数</td>
-                    <td><label id="F1_label_nc_sim3"></label></td>
-                    <td>pcs.</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="2">開始コマと終端コマの距離</td>
-                    <td><label id="F1_label_dist_sim3"></label></td>
-                    <td>mm</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td rowspan="2">部品中心間</br>距離</td>
-                    <td>チェーンステー</br>　⇔チェーンピン</td>
-                    <td><label id="F1_label_dd0_sim3"></label></td>
-                    <td>mm</td>
-                    <td>d'0</td>
-                </tr>
-                <tr>
-                    <td>チェーンステー</br>　⇔プーリー</br>( ≒ d'0 + D3/2 )</td>
-                    <td><label id="F1_label_d0_sim3"></label></td>
-                    <td>mm</td>
-                    <td>d0</td>
-                </tr>
-                <tr>
-                    <td colspan="2">チェーンテンショナースイング角</td>
-                    <td><label id="F1_label_swangle_sim3"></label></td>
-                    <td>degree</td>
-                    <td>θ0</td>
-                </tr>
-                <tr>
-                    <td colspan="6">※1 Sim-1と同じ長さのチェーンを目いっぱい張った時のチェーン軌道</td>
-                </tr>
-                <tr>
-                    <td colspan="6" class="chart">
-                        <div style="width:600px">
-                            <canvas id="mychart-scatter"></canvas>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">　<label id="F1_label_returnMsg"></label></td>
-                </tr>
-                <tr>
-                    <th colspan="6" style="text-align:left">テンションスプリング仕様</th>
-                </tr>
-                <tr>
-                    <td rowspan="3" colspan="2">チェーンテンショナー</br>スイング角</td>
-                    <td>Sim-1</td>
-                    <td><label id="F1_label_swangle_sim1_2"></label></td>
-                    <td rowspan="3">degree</td>
-                    <td rowspan="3">θ0</td>
-                </tr>
-                <tr>
-                    <td>Sim-3</td>
-                    <td><label id="F1_label_swangle_sim3_2"></label></td>
-                </tr>
-                <tr>
+                    <td><label id="F1_label_delta_swangle_sim2"></label></td>
                     <td>Δθ0</td>
-                    <td><label id="F1_label_delta_swangle"></label></td>
                 </tr>
                 <tr>
-                    <td colspan="3">テンションスプリング固定位置</br></br>※ 数値を変更する場合は入力欄に入力後、</br>　 リターンキーを押してください。</td>
-                    <td>
-                        <input type="text" id="F1_input_rs" value="56.0"  onchange="setDeflection()">
-                        <INPUT type="button" id="F1_BTN_rs_ini" value="初期値" onClick="set_rsIni()">
-                    </td>
+                    <td colspan="2">テンションスプリングたわみ量</br>(※3)</td>
+                    <td><label id="F1_label_deflection_sim2"></label></td>
                     <td>mm</td>
-                    <td>Rs</td>
+                    <td>Lmax</td>
                 </tr>
                 <tr>
-                    <td colspan="3">テンションスプリングたわみ量(最大)</td>
-                    <td><label id="F1_label_deflection"></label></td>
+                    <td rowspan="3">たわみ量最大時</br>(Sim-3)</td>
+                    <td colspan="2" rowspan="2">チェーンテンショナースイング角</td>
+                    <td><label id="F1_label_swangle_sim3"></label></td>
+                    <td rowspan="2">degree</td>
+                    <td>θ0</td>
+                </tr>
+                <tr>
+                    <td><label id="F1_label_delta_swangle_sim3"></label></td>
+                    <td>Δθ0</td>
+                </tr>
+                <tr>
+                    <td colspan="2">テンションスプリングたわみ量</br>(※3)</td>
+                    <td><label id="F1_label_deflection_sim3"></label></td>
                     <td>mm</td>
                     <td>Lmax</td>
                 </tr>
@@ -390,7 +391,10 @@
                     <td colspan="6" class="chart"><img src="./chainDevice.jpg" width="600px"></td>
                 </tr>
                 <tr>
-                    <td colspan="6"></td>
+                    <td colspan="6">
+                        ※2 軌道は計算結果欄グラフ参照</br>
+                        ※3 Sim-1を初期状態としたときのテンションスプリングたわみ量
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -421,10 +425,10 @@
         <input type="hidden" id="hidden_F1_label_d0_sim3" value="">
         <input type="hidden" id="hidden_F1_label_swangle_sim3" value="">
 
-        <input type="hidden" id="hidden_F1_label_swangle_sim1_2" value="">
-        <input type="hidden" id="hidden_F1_label_swangle_sim3_2" value="">
-        <input type="hidden" id="hidden_F1_label_delta_swangle" value="">
-        <input type="hidden" id="hidden_F1_label_deflection" value="">
+        <input type="hidden" id="hidden_F1_label_delta_swangle_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_delta_swangle_sim3" value="">
+        <input type="hidden" id="hidden_F1_label_deflection_sim2" value="">
+        <input type="hidden" id="hidden_F1_label_deflection_sim3" value="">
 
     </form>
     <script src="main.js"></script>

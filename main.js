@@ -198,9 +198,8 @@ function setResultTable(obt1,obt2,obt3) {
   setInnerText(obt3.d0,"F1_label_d0_sim3","0.0");
   setInnerText(swangle_3,"F1_label_swangle_sim3","0.0");
 
-  setInnerText(swangle,"F1_label_swangle_sim1_2","0.0");
-  setInnerText(swangle_3,"F1_label_swangle_sim3_2","0.0");
-  setInnerText(Math.abs(swangle-swangle_3),"F1_label_delta_swangle","0.0");
+  setInnerText(Math.abs(swangle-swangle_2),"F1_label_delta_swangle_sim2","0.0");
+  setInnerText(Math.abs(swangle-swangle_3),"F1_label_delta_swangle_sim3","0.0");
 }
 
 //軌道描画
@@ -257,9 +256,13 @@ function drawChart(obt1,obt2,obt3) {
 
 //チェーンテンショナースイング角算出
 function setDeflection() {
-  let delta_swangle = parseFloat(document.getElementById("hidden_F1_label_delta_swangle").value);      //チェーンステー長
   let rs = parseFloat(document.getElementById("F1_input_rs").value);
-  setInnerText(rs * delta_swangle * Math.PI / 180,"F1_label_deflection","0.0");
+
+  let delta_swangle2 = parseFloat(document.getElementById("hidden_F1_label_delta_swangle_sim2").value);      //チェーンステー長
+  setInnerText(rs * delta_swangle2 * Math.PI / 180,"F1_label_deflection_sim2","0.0");
+
+  let delta_swangle3 = parseFloat(document.getElementById("hidden_F1_label_delta_swangle_sim3").value);      //チェーンステー長
+  setInnerText(rs * delta_swangle3 * Math.PI / 180,"F1_label_deflection_sim3","0.0");
 }
 
 //テンションスプリング固定位置　初期値ボタンクリック
