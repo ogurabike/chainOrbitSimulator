@@ -240,20 +240,6 @@ class orbit {
             this.px[5] = this.px[6];
             this.py[5] = -this.py[6];
         }
-        
-        //P3とP4が近づき、両点の距離がチェーンピッチ以下になった時は
-        //プーリー無し軌道(orbitType = 2)と見なす。
-        if (((this.px[4] - this.px[3])**2 + (this.py[4] - this.py[3])**2) <= this.cp**2) {
-            this.px[2] = this.px[1];
-            this.py[2] = -this.py[1];
-            this.px[3] = undefined;
-            this.py[3] = undefined;
-            this.px[4] = undefined;
-            this.py[4] = undefined;
-            this.px[5] = this.px[6];
-            this.py[5] = -this.py[6];
-            this.orbitType = 2
-        }
 
         // チェーンステー長を伸ばしてチェーンをパツパツにした時（プーリー無し軌道）のプーリーの位置を導出
         if (this.orbitType == 2) {
@@ -292,10 +278,12 @@ class orbit {
             tangent(this.px[2], this.py[2], this.px[3], this.py[3], this.x, this.y, this.cp);
 
             //P3→P4
-            setOnCircumference(
-                c3x, c3y, this.r3,
-                this.px[3], this.py[3], this.px[4], this.py[4], this.x, this.y,
-                this.cp, false);
+            if (Math.sqrt((this.px[4] - this.x[this.x.length-1])**2 + (this.py[4] - this.y[this.y.length-1])**2) > this.cp) {
+                setOnCircumference(
+                    c3x, c3y, this.r3,
+                    this.px[3], this.py[3], this.px[4], this.py[4], this.x, this.y,
+                    this.cp, false);
+            }
 
             //P4→P5
             tangent(this.px[4], this.py[4], this.px[5], this.py[5], this.x, this.y, this.cp);
@@ -367,12 +355,7 @@ class orbit {
                     rad = rad + dlt;
                     this.d0 = - this.r0 * Math.sin(rad);
                 } else if (nc == nc2) {
-                    if (this.orbitType==2) {
-                        //P3とP4が近づき、両点の距離がチェーンピッチ以下になり
-                        //プーリー無し軌道(orbitType = 2)と判定された時の処理
-                        //(d0はsetOrbit内で自動的に再計算されるので最適化は不要)
-                        return true; 
-                    } else if (d <= dmin) {
+                    if (d <= dmin) {
                         dmin=d;
                         rad = rad + dlt;
                         this.d0 = - this.r0 * Math.sin(rad);
