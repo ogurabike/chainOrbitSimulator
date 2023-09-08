@@ -187,6 +187,11 @@ function setResultTable(obt1,obt2,obt3) {
   setInnerText(obt2.d0,"F1_label_d0_sim2","0.0");
   setInnerText(swangle_2,"F1_label_swangle_sim2","0.0");
 
+  document.getElementById("F1_Annotation_label_dlcs_sim2").innerText = 
+    "(" + varFormat(obt1.dlcs,"0.0")
+    + "～"
+    + varFormat(obt3.dlcs,"0.0") + "の間で設定できます)";
+
   let nc_3 = obt3.x.length - 1;
   let dist_3 = Math.sqrt((obt3.x[1] - obt3.x[0]) ** 2 + (obt3.y[1] - obt3.y[0]) ** 2);
   let swangle_3 = vbDegrees(Math.atan(obt3.d0 / Math.sqrt(obt3.r0 ** 2 - obt3.d0 ** 2)));
