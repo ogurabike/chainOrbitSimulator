@@ -10,6 +10,7 @@
 </head>
 <body onload="F1_setVal()">
     <h1><center>チェーン軌道シミュレータ</center></h1>
+    <h3><center>for 小倉自転車 チェーンデバイスI型</center></h3>
     <form name="F1" action="#">
         <table border="1">
             <thead>
@@ -165,26 +166,6 @@
                 
                 <tr>
                     <td rowspan="5">チェーン</br>テンショナー</br>設定</td>
-                    <td>アーム</td>
-                    <td>スイング半径</td>
-                    <td><input type="text" id="F1_input_r0" value="141.665"></td>
-                    <td>mm</td>
-                    <td>R0</td>
-                </tr>
-                <tr>
-                    <td rowspan="2">部品中心間</br>距離</td>
-                    <td>チェーンステー</br>　⇔チェーンピン</td>
-                    <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_setVal()"></td>
-                    <td>mm</td>
-                    <td>d'0</td>
-                </tr>
-                    <tr>
-                        <td>チェーンステー</br>　⇔プーリー</br>( ≒ d'0 + D3/2 )</td>
-                        <td><label id="F1_label_d0"></label></td>
-                        <td>mm</td>
-                        <td>d0</td>
-                    </tr>
-                <tr>
                     <td rowspan="2">テンション</br>プーリー</td>
                     <td>歯数</td>
                     <td>
@@ -208,6 +189,25 @@
                         <td>mm</td>
                         <td>D3</td>
                     </tr>
+                <tr>
+                    <td rowspan="3">テンション</br>プーリー</br>取付位置</td>
+                    <td>スイング半径</td>
+                    <td><input type="text" id="F1_input_r0" value="141.665"></td>
+                    <td>mm</td>
+                    <td>R0</td>
+                </tr>
+                <tr>
+                    <td>部品間距離</br>　チェーン</br>　　⇔チェーンステー</td>
+                    <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_setVal()"></td>
+                    <td>mm</td>
+                    <td>d'0</td>
+                </tr>
+                <tr>
+                    <td>部品間距離</br>　プーリー軸</br>　　⇔チェーンステー</br>( ≒ d'0 + D3/2 )</td>
+                    <td><label id="F1_label_d0"></label></td>
+                    <td>mm</td>
+                    <td>d0</td>
+                </tr>
                 <tr>
                     <td colspan="6" class="chart"><img src="./chainOrbit.jpg" width="600px"></td>
                 </tr>
@@ -371,7 +371,7 @@
                     <td colspan="2">テンションスプリングたわみ量</br>(※3)</td>
                     <td><label id="F1_label_deflection_sim2"></label></td>
                     <td>mm</td>
-                    <td>Lmax</td>
+                    <td>ΔL</td>
                 </tr>
                 <tr>
                     <td rowspan="3">たわみ量最大時</br>(Sim-3)</td>
@@ -385,10 +385,10 @@
                     <td>Δθ0</td>
                 </tr>
                 <tr>
-                    <td colspan="2">テンションスプリングたわみ量</br>(※3)</td>
+                    <td colspan="2">テンションスプリング最大たわみ量</br>(※3)</td>
                     <td><label id="F1_label_deflection_sim3"></label></td>
                     <td>mm</td>
-                    <td>Lmax</td>
+                    <td>ΔLmax</td>
                 </tr>
                 <tr>
                     <td colspan="6" class="chart"><img src="./chainDevice.jpg" width="600px"></td>
