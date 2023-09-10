@@ -53,6 +53,10 @@ function F1_getVal(obt) {
 //軌道計算ボタンクリック
 function startCalcAndOpti() {
 
+  if (! validation()) {
+    return false;
+  }
+
   document.getElementById("calcResultTbl").style.display="table-row-group";
 
   let returnMsg;
@@ -303,5 +307,73 @@ function changeBackgroundColor(id,flg) {
     document.getElementById(id).style.backgroundColor = "#eef374";
   } else {
     document.getElementById(id).style.backgroundColor = "";
+  }
+}
+
+//入力チェック
+function validation() {
+  
+  if (numCheck("F1_input_dlcs","データ入力/バイク仕様/フレーム/チェーンステー長",true)
+    && numCheck("F1_input_r0","データ入力/チェーンテンショナー設定/テンションプーリー取付位置/スイング半径",true)
+    && numCheck("F1_input_dd0","データ入力/チェーンテンショナー設定/テンションプーリー取付位置/部品間距離 チェーン⇔チェーンステー",true)
+    && numCheck("F1_input_rs","テンションスプリング仕様/テンションスプリング固定位置",true)
+    && numCheck("F1_input_dlcs_sim2","テンションスプリング仕様/Sim-2/チェーンステー長",false)
+    ) {
+    
+    let val = document.getElementById("F1_input_dlcs_sim2").value;                                //テンションスプリング仕様/Sim-2/チェーンステー長
+    let lowerlimtVal = parseFloat(document.getElementById("hidden_F1_label_dlcs_sim1").value);    //テンションスプリング仕様/Sim-2/チェーンステー長
+    let upperlimtVal = parseFloat(document.getElementById("hidden_F1_label_dlcs_sim3").value);    //テンションスプリング仕様/Sim-2/チェーンステー長
+    if (!(val == "")) {
+      val=parseFloat(val);
+      if (!upperlimitCheck("テンションスプリング仕様/Sim-2/チェーンステー長",upperlimtVal,val)
+        || !lowerlimitCheck("テンションスプリング仕様/Sim-2/チェーンステー長",lowerlimtVal,val)) {
+          return false;
+      }
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//必須＆半角数字入力チェック
+function numCheck(id,name,isRequired ) {
+  let val = document.getElementById(id).value;
+  let regex = new RegExp(/\d+[\.]?\d*/);
+
+  if (val == "") {
+    if (isRequired) {
+      alert('ERROR : 必須項目に値がセットされていません。\n'+ name);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  if (regex.test(val)) {
+    return true;
+  } else {
+    alert('ERROR : 半角数字を入力してください。\n'+ name + '\n入力値 : '+val);
+    return false;
+  }
+}
+
+//上限チェック
+function upperlimitCheck(name,limitVal,testVal) {
+  if (testVal>limitVal) {
+    alert('ERROR : 入力値が上限値を超えました。\n'+ name + '\n上限値 : '+limitVal + '\n入力値 : '+testVal);
+    return false;
+  } else {
+    return true;
+  }
+}
+
+//下限チェック
+function lowerlimitCheck(name,limitVal,testVal) {
+  if (testVal<limitVal) {
+    alert('ERROR : 入力値が下限値を下回りました。\n'+ name + '\n下限値 : '+limitVal + '\n入力値 : '+testVal);
+    return false;
+  } else {
+    return true;
   }
 }
