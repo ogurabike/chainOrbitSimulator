@@ -62,11 +62,13 @@ function startCalcAndOpti() {
   if (obt1.pulleyPositionCheck(1) == false) {
     returnMsg = "	d'0中心間最小距離(チェーンステー⇔チェーンピン)が小さすぎます。上側チェーンと下側チェーンが干渉してしまいます。";
     document.getElementById("F1_label_returnMsg").innerText = returnMsg;
+    changeBackgroundColor("F1_cell_returnMsg",true);
     return;
   }
   if (obt1.pulleyPositionCheck(2) == false) {
     returnMsg = "	d'0中心間最小距離(チェーンステー⇔チェーンピン)が大きすぎます。チェーンとプーリーは接触しません。";
     document.getElementById("F1_label_returnMsg").innerText = returnMsg;
+    changeBackgroundColor("F1_cell_returnMsg",true);
     return;
   }
 
@@ -97,6 +99,7 @@ function startCalcAndOpti() {
   // パラメータ変更なしでの再計算かつSim2のチェーンステー長が設定されていない場合、これ以上の再計算は行わない。
   let dlcs_sim2 = parseFloat(document.getElementById("F1_input_dlcs_sim2").value); 
   if ((nc == nc0) && calcFlg && (dlcs_sim2 == 0)) {
+    changeBackgroundColor("F1_cell_deflection_sim2",false);
     return;
   } else {
     if (nc < nc_min) {
@@ -127,10 +130,15 @@ function startCalcAndOpti() {
           obt2=obt3;
         }
       }
+      changeBackgroundColor("F1_cell_deflection_sim2",true);
+    } else {
+      changeBackgroundColor("F1_cell_deflection_sim2",false);
     }
 
     //前回計算からパラメータ変更なしでの再計算の場合は結果コメントは変更しない
-    if (!(nc == nc0) | !calcFlg ) {
+    if ((nc == nc0) && calcFlg ) {
+      changeBackgroundColor("F1_cell_returnMsg",false);
+    } else {
       let d00 = obt1.d0;
       if ((obt1.set_d0Min(nc)) && !(obt1.d0 == d00)) {
         returnMsg = "\n\nなお、d'0中心間最小距離(チェーンステー⇔チェーンピン)は、以下の通り最適化されています。\n"
@@ -143,8 +151,10 @@ function startCalcAndOpti() {
         //d'0中心間最小距離(チェーンステー⇔チェーンピン)を再設定
         document.getElementById("F1_input_dd0").value = obt1.d0 - obt1.r3;  // r3 = d3/2
         F1_setVal();  // onchangeイベントを強制実行
+        changeBackgroundColor("F1_cell_returnMsg",true);
       } else {
         returnMsg = "最適化に失敗しました。\n	d'0中心間最小距離(チェーンステー⇔チェーンピン)を見直してください。";
+        changeBackgroundColor("F1_cell_returnMsg",true);
       }
     }
 
@@ -286,4 +296,12 @@ function setInnerText(xval,id,format) {
 function setValue(xval,id,format) {
   document.getElementById(id).value = varFormat(xval,format);
   document.getElementById("hidden_" + id).value = xval;
+}
+
+function changeBackgroundColor(id,flg) {
+  if (flg) {
+    document.getElementById(id).style.backgroundColor = "#eef374";
+  } else {
+    document.getElementById(id).style.backgroundColor = "";
+  }
 }
