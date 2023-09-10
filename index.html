@@ -200,16 +200,19 @@
                     <td>R0</td>
                 </tr>
                 <tr>
-                    <td>部品間距離</br>　チェーン</br>　　⇔チェーンステー</td>
+                    <td>部品間距離 ※1</br>　チェーン</br>　　⇔チェーンステー</td>
                     <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_setVal()"></td>
                     <td>mm</td>
                     <td>d'0</td>
                 </tr>
                 <tr>
-                    <td>部品間距離</br>　プーリー軸</br>　　⇔チェーンステー</br>( ≒ d'0 + D3/2 )</td>
+                    <td>部品間距離 ※1</br>　プーリー軸</br>　　⇔チェーンステー</br>( ≒ d'0 + D3/2 )</td>
                     <td><label id="F1_label_d0"></label></td>
                     <td>mm</td>
                     <td>d0</td>
+                </tr>
+                <tr>
+                    <td colspan="6">※1 チェーンステー（図中の線分C1C2）から見た各パーツの距離。</br>　　本プログラムの仕様上、チェーンステーより上に設置する場合は－（マイナス）値、</br>　　下に設置する場合は＋（プラス）値になっているので注意してください。</td>
                 </tr>
                 <tr>
                     <td colspan="6" class="chart"><img src="./chainOrbit.jpg" width="600px"></td>
@@ -259,7 +262,7 @@
                     <td>d0</td>
                 </tr>
                 <tr>
-                    <td rowspan="5">Sim-3</br>(※1)</td>
+                    <td rowspan="5">Sim-3</br>(※2)</td>
                     <td colspan="2">最長チェーンステー長</td>
                     <td><label id="F1_label_dlcs_sim3"></label></td>
                     <td>mm</td>
@@ -291,7 +294,7 @@
                     <td>d0</td>
                 </tr>
                 <tr>
-                    <td colspan="6">※1 Sim-1と同じ長さのチェーンを目いっぱい張った時のチェーン軌道</td>
+                    <td colspan="6">※2 Sim-1と同じ長さのチェーンを目いっぱい張った時のチェーン軌道</td>
                 </tr>
                 <tr>
                     <td colspan="6" class="chart">
@@ -325,7 +328,7 @@
                     <td>θ0</td>
                 </tr>
                 <tr>
-                    <td rowspan="8">Sim-2</br>(※2)</td>
+                    <td rowspan="8">Sim-2</br>(※3)</td>
                     <td colspan="2">
                         チェーンステー長</br>
                         <label id="F1_Annotation_label_dlcs_sim2"></label>
@@ -373,7 +376,7 @@
                     <td>Δθ0</td>
                 </tr>
                 <tr>
-                    <td colspan="2">テンションスプリングたわみ量</br>(※3)</td>
+                    <td colspan="2">テンションスプリングたわみ量</br>(※4)</td>
                     <td  id="F1_cell_deflection_sim2">
                         <label id="F1_label_deflection_sim2"></label>
                     </td>
@@ -392,7 +395,7 @@
                     <td>Δθ0</td>
                 </tr>
                 <tr>
-                    <td colspan="2">テンションスプリング最大たわみ量</br>(※3)</td>
+                    <td colspan="2">テンションスプリング最大たわみ量</br>(※4)</td>
                     <td><label id="F1_label_deflection_sim3"></label></td>
                     <td>mm</td>
                     <td>ΔLmax</td>
@@ -402,8 +405,8 @@
                 </tr>
                 <tr>
                     <td colspan="6">
-                        ※2 軌道は計算結果欄グラフ参照</br>
-                        ※3 Sim-1を初期状態としたときのテンションスプリングたわみ量
+                        ※3 軌道は計算結果欄グラフ参照</br>
+                        ※4 Sim-1を初期状態としたときのテンションスプリングたわみ量
                     </td>
                 </tr>
             </tbody>
