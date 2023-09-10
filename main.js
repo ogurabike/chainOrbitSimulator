@@ -13,6 +13,8 @@ function F1_setVal() {
   let d2 = cst * cp / Math.PI;
   setInnerText(d2,"F1_label_d2","0.00");                                  //スプロケットピッチ円直径
 
+  setInnerText(crt/cst,"F1_label_gearratio","0.00");                      //ギア比計算
+
   let tpt = parseFloat(document.getElementById("F1_select_tpt").value);   //テンションプーリー歯数
   let d3 = tpt * cp / Math.PI;                                            //テンションプーリー円直径
   setInnerText(d3,"F1_label_d3","0.00");
