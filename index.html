@@ -32,7 +32,7 @@
                 <tr>
                     <td rowspan="8">バイク仕様</td>
                     <td>フレーム</td>
-                    <td>チェーンステー長</td>
+                    <td>チェーンステー長 (※1)</td>
                     <td><input type="text" value="420" id="F1_input_dlcs"></td>
                     <td>mm</td>
                     <td>dlcs</td>
@@ -196,25 +196,32 @@
                 </tr>
                 <tr>
                     <td rowspan="3">テンション</br>プーリー</br>取付位置</td>
-                    <td>スイング半径</td>
+                    <td>スイング半径</br>　xxmm以上に設定してください。</br>　(R0 ≧ D1/2 + D3/2 + 5)</td>
                     <td><input type="text" id="F1_input_r0" value="141.665"></td>
                     <td>mm</td>
                     <td>R0</td>
                 </tr>
                 <tr>
-                    <td>部品間距離 ※1</br>　チェーン</br>　　⇔チェーンステー</td>
+                    <td>部品間距離 (※2)</br>　チェーン</br>　　⇔チェーンステー</td>
                     <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_setVal()"></td>
                     <td>mm</td>
                     <td>d'0</td>
                 </tr>
                 <tr>
-                    <td>部品間距離 ※1</br>　プーリー軸</br>　　⇔チェーンステー</br>( ≒ d'0 + D3/2 )</td>
+                    <td>部品間距離 (※2)</br>　プーリー軸</br>　　⇔チェーンステー</br>　( d0 ≒ d'0 + D3/2 )</td>
                     <td><label id="F1_label_d0"></label></td>
                     <td>mm</td>
                     <td>d0</td>
                 </tr>
                 <tr>
-                    <td colspan="6">※1 チェーンステー（図中の線分C1C2）から見た各パーツの距離。</br>　　本プログラムの仕様上、チェーンステーより上に設置する場合は－（マイナス）値、</br>　　下に設置する場合は＋（プラス）値になっているので注意してください。</td>
+                    <td colspan="6">
+                        ※1 チェーンステー長が変化するリアサスペンション付きフレームの場合は、
+                        </br>　　最小チェーンステー長（サスペンション 無荷重時のチェーンステー長）を指定してください。
+                        </br></br>
+                        ※2 チェーンステー（図中の線分C1C2）から見た各パーツの距離。
+                        </br>　　本プログラムの仕様上、チェーンステーより上に設置する場合は－（マイナス）値、
+                        </br>　　下に設置する場合は＋（プラス）値になっているので注意してください。
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="6" class="chart"><img src="./chainOrbit.jpg" width="600px"></td>
@@ -233,7 +240,7 @@
                 </tr>
                 <tr>
                     <td rowspan="5">Sim-1</td>
-                    <td colspan="2">チェーンステー長</td>
+                    <td colspan="2">最小チェーンステー長</td>
                     <td><label id="F1_label_dlcs_sim1"></label></td>
                     <td>mm</td>
                     <td>dlcs</td>
@@ -264,7 +271,7 @@
                     <td>d0</td>
                 </tr>
                 <tr>
-                    <td rowspan="5">Sim-3</br>(※2)</td>
+                    <td rowspan="5">Sim-3</br>(※3)</td>
                     <td colspan="2">最長チェーンステー長</td>
                     <td><label id="F1_label_dlcs_sim3"></label></td>
                     <td>mm</td>
@@ -296,7 +303,7 @@
                     <td>d0</td>
                 </tr>
                 <tr>
-                    <td colspan="6">※2 Sim-1と同じ長さのチェーンを目いっぱい張った時のチェーン軌道</td>
+                    <td colspan="6">※3 Sim-1と同じ長さのチェーンを目いっぱい張った時のチェーン軌道</td>
                 </tr>
                 <tr>
                     <td colspan="6" class="chart">
@@ -330,9 +337,9 @@
                     <td>θ0</td>
                 </tr>
                 <tr>
-                    <td rowspan="8">Sim-2</br>(※3)</td>
+                    <td rowspan="8">Sim-2</br>(※5)</td>
                     <td colspan="2">
-                        チェーンステー長</br>
+                        チェーンステー長 (※4)</br>
                         <label id="F1_Annotation_label_dlcs_sim2"></label>
                     </td>
                     <td>
@@ -378,7 +385,7 @@
                     <td>Δθ0</td>
                 </tr>
                 <tr>
-                    <td colspan="2">テンションスプリングたわみ量</br>(※4)</td>
+                    <td colspan="2">テンションスプリングたわみ量</br>(※6)</td>
                     <td  id="F1_cell_deflection_sim2">
                         <label id="F1_label_deflection_sim2"></label>
                     </td>
@@ -397,7 +404,7 @@
                     <td>Δθ0</td>
                 </tr>
                 <tr>
-                    <td colspan="2">テンションスプリング最大たわみ量</br>(※4)</td>
+                    <td colspan="2">テンションスプリング最大たわみ量</br>(※6)</td>
                     <td><label id="F1_label_deflection_sim3"></label></td>
                     <td>mm</td>
                     <td>ΔLmax</td>
@@ -407,8 +414,9 @@
                 </tr>
                 <tr>
                     <td colspan="6">
-                        ※3 軌道は計算結果欄グラフ参照</br>
-                        ※4 Sim-1を初期状態としたときのテンションスプリングたわみ量
+                        ※4 リアサスペンション フルボトム時のチェーンステー長を指定してください。</br>
+                        ※5 軌道は計算結果欄グラフ参照</br>
+                        ※6 Sim-1を初期状態としたときのテンションスプリングたわみ量
                     </td>
                 </tr>
             </tbody>
