@@ -19,6 +19,19 @@ function F1_setVal() {
   let d3 = tpt * cp / Math.PI;                                            //テンションプーリー円直径
   setInnerText(d3,"F1_label_d3","0.00");
 
+  let r0 = document.getElementById("F1_input_r0").value;
+  if (r0=="") {
+    r0=0.0;
+  } else {
+    r0 = parseFloat(r0);
+  }
+  let r0min = (d1+d3)/2 + 5;
+  document.getElementById("F1_Annotation_label_r0").innerText 
+    = varFormat(r0min,"0.00") + "以上を設定できます。";
+  if (r0 < r0min) {
+    document.getElementById("F1_input_r0").value=varFormat(r0min,"0.00");
+  }
+
   let dd0 = parseFloat(document.getElementById("F1_input_dd0").value);    //部品中心間最小距離(チェーンステー⇔チェーンピン)
   let d0 = dd0 + (d3 / 2);
   setInnerText(d0,"F1_label_d0","0.00");                                  //部品中心間最小距離(チェーンステー⇔プーリー)
