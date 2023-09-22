@@ -132,6 +132,12 @@ function set_rsIni() {
   setDeflection();
 }
 
+//
+function F1_changeVal() {
+  F1_setVal();
+  document.getElementById("calcResultTbl").style.display="none";
+}
+
 //テーブルの更新
 function F1_setVal() {
   let cp = parseFloat(document.getElementById("F1_label_cp").innerText);  //チェーンピッチ

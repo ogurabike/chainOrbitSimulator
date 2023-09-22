@@ -33,7 +33,7 @@
                     <td rowspan="8">バイク仕様</td>
                     <td>フレーム</td>
                     <td>チェーンステー長 (※1)</td>
-                    <td><input type="text" value="420" id="F1_input_dlcs"></td>
+                    <td><input type="text" value="420" id="F1_input_dlcs" onchange="F1_changeVal()"></td>
                     <td>mm</td>
                     <td>dlcs</td>
                 </tr>
@@ -47,8 +47,8 @@
                 <tr>
                     <td>チェーンタイプ</td>
                     <td>
-                        <input type="radio" name="F1_input_chainTypes" id="F1_input_chainTypes_1" value="標準" checked><label>標準</label>
-                        <input type="radio" name="F1_input_chainTypes" id="F1_input_chainTypes_2" value="半コマ"><label>半コマ</label>
+                        <input type="radio" name="F1_input_chainTypes" id="F1_input_chainTypes_1" value="標準" checked onchange="F1_changeVal()"><label>標準</label>
+                        <input type="radio" name="F1_input_chainTypes" id="F1_input_chainTypes_2" value="半コマ" onchange="F1_changeVal()"><label>半コマ</label>
                     </td>
                     <td></td>
                     <td></td>
@@ -57,7 +57,7 @@
                     <td rowspan="2">チェーンリング</td>
                     <td>歯数</td>
                     <td>
-                        <select id="F1_select_crt" onchange="F1_setVal()">
+                        <select id="F1_select_crt" onchange="F1_changeVal()">
                             <option value="20">20</option>
                             <option value="21">21</option>
                             <option value="22">22</option>
@@ -116,7 +116,7 @@
                     <td rowspan="2">スプロケット</td>
                     <td>歯数</td>
                     <td>
-                        <select id="F1_select_cst" onchange="F1_setVal()">
+                        <select id="F1_select_cst" onchange="F1_changeVal()">
                             <option value="10">10</option>
                             <option value="11">11</option>
                             <option value="12">12</option>
@@ -174,7 +174,7 @@
                     <td rowspan="2">テンション</br>プーリー</td>
                     <td>歯数</td>
                     <td>
-                        <select id="F1_select_tpt" onchange="F1_setVal()">
+                        <select id="F1_select_tpt" onchange="F1_changeVal()">
                             <option value="10">10</option>
                             <option value="11" selected>11</option>
                             <option value="12">12</option>
@@ -201,13 +201,13 @@
                         </br>　( <label id="F1_Annotation_label_r0"></label>
                         </br>　　R0 ≧ (D1+D3)/2 + 5 )
                     </td>
-                    <td><input type="text" id="F1_input_r0"></td>
+                    <td><input type="text" id="F1_input_r0" onchange="F1_changeVal()"></td>
                     <td>mm</td>
                     <td>R0</td>
                 </tr>
                 <tr>
                     <td>部品間距離 (※2)</br>　チェーン</br>　　⇔チェーンステー</td>
-                    <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_setVal()"></td>
+                    <td><input type="text" id="F1_input_dd0" value="25.0" onchange="F1_changeVal()"></td>
                     <td>mm</td>
                     <td>d'0</td>
                 </tr>
