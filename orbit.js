@@ -828,15 +828,3 @@ function isOnLineSegment(
 function outerProduct(ax,ay,bx,by,cx,cy) {
     return varFormat((bx-ax)*(cy-ay)-(cx-ax)*(by-ay),"0.00000")+0;   //最後+0しないと-0問題が出る
 }
-
-//指定桁数で丸め込み
-function varFormat(val1, str1) {
-    let val2 = str1.length - 2;
-    if (val2 == -1) { val2 = 0 }
-    return Math.round(val1 * 10 ** val2) / (10 ** val2);
-}
-
-//rad→degree変換
-function vbDegrees(val1) {
-    return 180 / Math.PI * val1;
-}
