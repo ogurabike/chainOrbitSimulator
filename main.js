@@ -1,70 +1,6 @@
 
 var myChart;
 
-//テーブルの更新
-function F1_setVal() {
-  let cp = parseFloat(document.getElementById("F1_label_cp").innerText);  //チェーンピッチ
-
-  let crt = parseFloat(document.getElementById("F1_select_crt").value);   //チェーンリング歯数
-  let d1 = crt * cp / Math.PI;
-  setInnerText(d1,"F1_label_d1","0.00");                                  //チェーンリングピッチ円直径
-
-  let cst = parseFloat(document.getElementById("F1_select_cst").value);   //スプロケット歯数
-  let d2 = cst * cp / Math.PI;
-  setInnerText(d2,"F1_label_d2","0.00");                                  //スプロケットピッチ円直径
-
-  setInnerText(crt/cst,"F1_label_gearratio","0.00");                      //ギア比計算
-
-  let tpt = parseFloat(document.getElementById("F1_select_tpt").value);   //テンションプーリー歯数
-  let d3 = tpt * cp / Math.PI;                                            //テンションプーリー円直径
-  setInnerText(d3,"F1_label_d3","0.00");
-
-  let r0 = document.getElementById("F1_input_r0").value;
-  if (r0=="") {
-    r0=0.0;
-  } else {
-    r0 = parseFloat(r0);
-  }
-  let r0min = (d1+d3)/2 + 5;
-  document.getElementById("F1_Annotation_label_r0").innerText 
-    = varFormat(r0min,"0.00") + "以上を設定できます。";
-  if (r0 < r0min) {
-    document.getElementById("F1_input_r0").value=varFormat(r0min,"0.00");
-  }
-
-  let dd0 = parseFloat(document.getElementById("F1_input_dd0").value);    //部品中心間最小距離(チェーンステー⇔チェーンピン)
-  let d0 = dd0 + (d3 / 2);
-  setInnerText(d0,"F1_label_d0","0.00");                                  //部品中心間最小距離(チェーンステー⇔プーリー)
-}
-
-//テーブル値の取得
-function F1_getVal(obt) {
-  obt.cp = parseFloat(document.getElementById("F1_label_cp").innerText);          //チェーンピッチ
-  obt.r0 = parseFloat(document.getElementById("F1_input_r0").value);              //チェーンテンショナースイング半径
-  obt.r1 = parseFloat(document.getElementById("hidden_F1_label_d1").value) / 2;   //チェーンリングピッチ円半径
-  obt.r2 = parseFloat(document.getElementById("hidden_F1_label_d2").value) / 2;   //スプロケットピッチ円半径
-  obt.r3 = parseFloat(document.getElementById("hidden_F1_label_d3").value) / 2;   //テンションプーリーピッチ円半径
-  obt.d0 = parseFloat(document.getElementById("hidden_F1_label_d0").value);		    //中心間最小距離(チェーンステー⇔プーリー)
-  obt.dlcs = parseFloat(document.getElementById("F1_input_dlcs").value);          //チェーンステー長
-
-  //半コマチェーン
-  let elements = document.getElementsByName("F1_input_chainTypes");
-  let len = elements.length;
-  let checkValue = "";
-
-  for (let i = 0; i < len; i++){
-      if (elements.item(i).checked){
-          checkValue = elements.item(i).value;
-      }
-  }
-
-  if (checkValue == "標準") {
-    obt.isHalfChain = false;
-  } else if (checkValue == "半コマ") {
-    obt.isHalfChain = true;
-  }
-}
-
 //軌道計算ボタンクリック
 function startCalcAndOpti() {
 
@@ -190,6 +126,76 @@ function startCalcAndOpti() {
   }
 }
 
+//テンションスプリング固定位置　初期値ボタンクリック
+function set_rsIni() {
+  document.getElementById("F1_input_rs").value=56.0;
+  setDeflection();
+}
+
+//テーブルの更新
+function F1_setVal() {
+  let cp = parseFloat(document.getElementById("F1_label_cp").innerText);  //チェーンピッチ
+
+  let crt = parseFloat(document.getElementById("F1_select_crt").value);   //チェーンリング歯数
+  let d1 = crt * cp / Math.PI;
+  setInnerText(d1,"F1_label_d1","0.00");                                  //チェーンリングピッチ円直径
+
+  let cst = parseFloat(document.getElementById("F1_select_cst").value);   //スプロケット歯数
+  let d2 = cst * cp / Math.PI;
+  setInnerText(d2,"F1_label_d2","0.00");                                  //スプロケットピッチ円直径
+
+  setInnerText(crt/cst,"F1_label_gearratio","0.00");                      //ギア比計算
+
+  let tpt = parseFloat(document.getElementById("F1_select_tpt").value);   //テンションプーリー歯数
+  let d3 = tpt * cp / Math.PI;                                            //テンションプーリー円直径
+  setInnerText(d3,"F1_label_d3","0.00");
+
+  let r0 = document.getElementById("F1_input_r0").value;
+  if (r0=="") {
+    r0=0.0;
+  } else {
+    r0 = parseFloat(r0);
+  }
+  let r0min = (d1+d3)/2 + 5;
+  document.getElementById("F1_Annotation_label_r0").innerText 
+    = varFormat(r0min,"0.00") + "以上を設定できます。";
+  if (r0 < r0min) {
+    document.getElementById("F1_input_r0").value=varFormat(r0min,"0.00");
+  }
+
+  let dd0 = parseFloat(document.getElementById("F1_input_dd0").value);    //部品中心間最小距離(チェーンステー⇔チェーンピン)
+  let d0 = dd0 + (d3 / 2);
+  setInnerText(d0,"F1_label_d0","0.00");                                  //部品中心間最小距離(チェーンステー⇔プーリー)
+}
+
+//テーブル値の取得
+function F1_getVal(obt) {
+  obt.cp = parseFloat(document.getElementById("F1_label_cp").innerText);          //チェーンピッチ
+  obt.r0 = parseFloat(document.getElementById("F1_input_r0").value);              //チェーンテンショナースイング半径
+  obt.r1 = parseFloat(document.getElementById("hidden_F1_label_d1").value) / 2;   //チェーンリングピッチ円半径
+  obt.r2 = parseFloat(document.getElementById("hidden_F1_label_d2").value) / 2;   //スプロケットピッチ円半径
+  obt.r3 = parseFloat(document.getElementById("hidden_F1_label_d3").value) / 2;   //テンションプーリーピッチ円半径
+  obt.d0 = parseFloat(document.getElementById("hidden_F1_label_d0").value);		    //中心間最小距離(チェーンステー⇔プーリー)
+  obt.dlcs = parseFloat(document.getElementById("F1_input_dlcs").value);          //チェーンステー長
+
+  //半コマチェーン
+  let elements = document.getElementsByName("F1_input_chainTypes");
+  let len = elements.length;
+  let checkValue = "";
+
+  for (let i = 0; i < len; i++){
+      if (elements.item(i).checked){
+          checkValue = elements.item(i).value;
+      }
+  }
+
+  if (checkValue == "標準") {
+    obt.isHalfChain = false;
+  } else if (checkValue == "半コマ") {
+    obt.isHalfChain = true;
+  }
+}
+
 //計算結果表示
 function setResultTable(obt1,obt2,obt3) {
   let nc = obt1.x.length - 1;
@@ -297,12 +303,6 @@ function setDeflection() {
 
   let delta_swangle3 = parseFloat(document.getElementById("hidden_F1_label_delta_swangle_sim3").value);      //チェーンステー長
   setInnerText(rs * delta_swangle3 * Math.PI / 180,"F1_label_deflection_sim3","0.0");
-}
-
-//テンションスプリング固定位置　初期値ボタンクリック
-function set_rsIni() {
-  document.getElementById("F1_input_rs").value=56.0;
-  setDeflection();
 }
 
 //
