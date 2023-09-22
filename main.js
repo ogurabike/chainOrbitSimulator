@@ -132,7 +132,7 @@ function set_rsIni() {
   setDeflection();
 }
 
-//
+//データ入力部の値が変更された時の処理
 function F1_changeVal() {
   F1_setVal();
   document.getElementById("calcResultTbl").style.display="none";
