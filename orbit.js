@@ -565,7 +565,7 @@ function setOnCircumference(
         let rad2;
         let rad12;
         let deltarad12;
-        let ndeltarad12;
+        let ndeltarad12=0;
 
         let dlt;
         
@@ -674,24 +674,27 @@ function setOnCircumference(
         y[nc] = r * Math.sin(angle) + y0;
         
         //残りの点を配置する。
-        do {
+        if (ndeltarad12 > 0) {
+            do {
         
-            if (isClockwise) {
-                angle = angle - deltarad12;
-            } else {
-                angle = angle + deltarad12;
-            }
-            
-            nc = nc + 1;
-            x[nc] = r * Math.cos(angle) + x0;
-            y[nc] = r * Math.sin(angle) + y0;
-
-        } while (
-            (
-                (x2 - (r * Math.cos(angle) + x0)) ** 2 
-                + (y2 - (r * Math.sin(angle) + y0)) ** 2
-            ) >= cp**2
-        );
+                if (isClockwise) {
+                    angle = angle - deltarad12;
+                } else {
+                    angle = angle + deltarad12;
+                }
+                
+                nc = nc + 1;
+                x[nc] = r * Math.cos(angle) + x0;
+                y[nc] = r * Math.sin(angle) + y0;
+    
+            } while (
+                (
+                    (x2 - (r * Math.cos(angle) + x0)) ** 2 
+                    + (y2 - (r * Math.sin(angle) + y0)) ** 2
+                ) >= cp**2
+            );
+        }
+        
     }
 
 //両端を指定された接線上に指定ピッチで点を配置するプログラム
@@ -750,23 +753,28 @@ function tangent(
     y[nc] = v;
 
     //残りの点を配置する
-    angle = Math.atan(slope);
+    let d12 = Math.sqrt((p2x-p1x)**2 + (p2y-p1y)**2);
+    let nd12 = Math.floor(d12/d);
 
-    do {
-    nc = nc + 1;
+    if (nd12 > 0) {
+        angle = Math.atan(slope);
 
-    if (slope == 0) {
-        x[nc] = x[nc - 1] + d;
-        y[nc] = y[nc - 1];
-    } else {
-        x[nc] = x[nc - 1] + (p2x - p1x) / Math.abs((p2x - p1x)) * d * Math.abs(Math.cos(angle));
-        y[nc] = y[nc - 1] + (p2y - p1y) / Math.abs((p2y - p1y)) * d * Math.abs(Math.sin(angle));
+        do {
+        nc = nc + 1;
+
+        if (slope == 0) {
+            x[nc] = x[nc - 1] + d;
+            y[nc] = y[nc - 1];
+        } else {
+            x[nc] = x[nc - 1] + (p2x - p1x) / Math.abs((p2x - p1x)) * d * Math.abs(Math.cos(angle));
+            y[nc] = y[nc - 1] + (p2y - p1y) / Math.abs((p2y - p1y)) * d * Math.abs(Math.sin(angle));
+        }
+        } while (isOnLineSegment(p1x, p1y, p2x, p2y, x[nc], y[nc]));
+
+        //最後の点は線分からはみ出してるから削除する
+        x.pop();
+        y.pop();
     }
-    } while (isOnLineSegment(p1x, p1y, p2x, p2y, x[nc], y[nc]));
-
-    //最後の点は線分からはみ出してるから削除する
-    x.pop();
-    y.pop();
 }
 
 //二次関数における解と係数の関係
