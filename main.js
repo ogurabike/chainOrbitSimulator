@@ -91,10 +91,14 @@ function startCalcAndOpti() {
     }
 
     //前回計算からパラメータ変更なしでの再計算の場合は結果コメントは変更しない
+    //そうでない場合、中心間最小距離(チェーンステー⇔チェーンピン)最適化を行い、
+    //問題なく最適化され、中心間最小距離(チェーンステー⇔チェーンピン)が変わっていれば結果コメント作成。
     if ((nc == nc0) && calcFlg ) {
       changeBackgroundColor("F1_cell_returnMsg",false);
     } else {
       let d00 = obt1.d0;
+
+      //中心間最小距離(チェーンステー⇔チェーンピン)最適化
       if ((obt1.set_d0Min(nc)) && !(obt1.d0 == d00)) {
         returnMsg = "\n\nなお、d'0中心間最小距離(チェーンステー⇔チェーンピン)は、以下の通り最適化されています。\n"
           + varFormat(d00 - obt1.r3,"0.0") + "mm→" + varFormat(obt1.d0 - obt1.r3,"0.0") + "mm";
@@ -107,9 +111,11 @@ function startCalcAndOpti() {
         document.getElementById("F1_input_dd0").value = obt1.d0 - obt1.r3;  // r3 = d3/2
         F1_setVal();  // onchangeイベントを強制実行
         changeBackgroundColor("F1_cell_returnMsg",true);
+
       } else {
         returnMsg = "最適化に失敗しました。\n	d'0中心間最小距離(チェーンステー⇔チェーンピン)を見直してください。";
         changeBackgroundColor("F1_cell_returnMsg",true);
+        
       }
     }
 
